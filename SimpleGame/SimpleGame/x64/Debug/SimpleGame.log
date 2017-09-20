@@ -1,4 +1,9 @@
-﻿  stdafx.cpp
+﻿  Scene.cpp
+  Framework.cpp
+  코드를 생성하고 있습니다...
+  건너뛰고 있습니다... (관련된 변경 내용 없음)
+  TitleScene.cpp
   SimpleGame.cpp
-  SimpleGame.vcxproj -> D:\programing\게임소프트웨어공학\SimpleGame\x64\Debug\SimpleGame.exe
-  SimpleGame.vcxproj -> D:\programing\게임소프트웨어공학\SimpleGame\x64\Debug\SimpleGame.pdb (Partial PDB)
+  MainScene.cpp
+  SimpleGame.vcxproj -> D:\MySource\GSE_2_2013182030\SimpleGame\x64\Debug\SimpleGame.exe
+  SimpleGame.vcxproj -> D:\MySource\GSE_2_2013182030\SimpleGame\x64\Debug\SimpleGame.pdb (Partial PDB)

@@ -9,72 +9,48 @@ but WITHOUT ANY WARRANTY.
 */
 
 #include "stdafx.h"
-
-std::string title = CLIENT_TITLE;
-std::string fps_string;
-
-std::chrono::system_clock::time_point current_time;
-std::chrono::duration<double> timeElapsed; // 시간이 얼마나 지났나
-double fps;
-
-void Init()
-{
-	current_time = std::chrono::system_clock::now();
-	fps = 0.0;
-}
-
-void Update(double TimeElapsed)
-{
-
-}
+#include "Framework.h"
+#include "GameTimer.h"
 
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
-
+	GameFramework->Render();
 	glutSwapBuffers();
 }
 
 void Idle(void)
 {
-	// Get tick
-	timeElapsed = std::chrono::system_clock::now() - current_time;
-	if (timeElapsed.count() > MAX_FPS)
+	if (Timer->GetTick())
 	{
-		current_time = std::chrono::system_clock::now();
-
-		if (timeElapsed.count() > 0.0f)
-			fps = 1.0f / timeElapsed.count();
+		GameFramework->Update(Timer->GetTimeElapsed());
+		RenderScene();
 	}
-	// 최대 FPS 미만의 시간이 경과하면 진행 생략
 	else return;
 
-	Update(timeElapsed.count());
-	RenderScene();
-
-	int ifps = (int)fps;
-	fps_string = title + " (FPS "+ std::to_string(ifps) + ")";
-	glutSetWindowTitle(fps_string.data());
+	glutSetWindowTitle(GameFramework->GetTitleStr());
 }
 
 // 키보드 전반
 void KeyInput(unsigned char key, int x, int y)
 {
-	std::cout << "KeyInput Key: "<< key << " X: " << x << " Y: " << y << std::endl;
+	GameFramework->Input_Key(key, x, y);
+	//std::cout << "KeyInput Key: " << key << " X: " << x << " Y: " << y << std::endl;
 }
 
 // 방향키, 쉬프트, 컨트롤
 void SpecialKeyInput(int key, int x, int y)
 {
-	std::cout << "Special Key Input Key: " << key << " X: " << x << " Y: " << y << std::endl;
+	GameFramework->Input_SpecialKey(key, x, y);
+	//std::cout << "Special Key Input Key: " << key << " X: " << x << " Y: " << y << std::endl;
 }
 
 // 마우스 클릭 및 클릭시 좌표
-void MouseInput(int LRButton, int BottonUp, int x, int y)
+void MouseInput(int button, int BottonPress, int x, int y)
 {
-	std::cout << "Mouse Input LRButton: " << LRButton 
-		<< " BottonUp: " << BottonUp << " X: " << x << " Y: " << y << std::endl;
+	GameFramework->Input_MouseButton(button, BottonPress, x, y);
+	//std::cout << "Mouse Input Button: " << button
+	//	<< " BottonPress: " << BottonPress << " X: " << x << " Y: " << y << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -83,7 +59,7 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);//optional
 	glutInitWindowSize(CLIENT_WIDTH, CLIENT_HEIGHT); //optional
-	glutCreateWindow(title.data());
+	glutCreateWindow(CLIENT_TITLE);
 	glewInit();
 	if (glewIsSupported("GL_VERSION_3_0"))
 	{
@@ -100,7 +76,7 @@ int main(int argc, char **argv)
 	glutSpecialFunc(SpecialKeyInput);
 	glutMouseFunc(MouseInput);
 
-	Init();
+	GameFramework->Init(CLIENT_WIDTH, CLIENT_HEIGHT);
 
 	glutMainLoop();
 
