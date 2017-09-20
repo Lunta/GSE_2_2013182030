@@ -14,9 +14,11 @@ protected:
 	Type		m_tag;
 	Renderer*	m_pRenderer;
 
+	Vec4f		m_vec4fBackgroundColor;
+
 public:
 	Scene() = delete;
-	Scene(Type tag);
+	Scene(const Type& tag);
 	virtual ~Scene();
 
 	virtual void BuildObjects();
@@ -27,7 +29,7 @@ public:
 
 	virtual void Input_Key(unsigned char key, int x, int y) = 0;
 	virtual void Input_SpecialKey(int key, int x, int y) = 0;
-	virtual void Input_MouseButton(int button, int BottonPress, int x, int y) = 0;
+	virtual void Input_MouseButton(int button, int state, int x, int y) = 0;
 
 	const Type& GetTag() { return m_tag; }
 };

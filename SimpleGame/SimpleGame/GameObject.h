@@ -12,9 +12,9 @@ protected:
 
 public:
 	GameObject() = delete;
-	GameObject(Renderer * pRenderer);
-	GameObject(Renderer * pRenderer, const Vec3f& pos, float size, const Vec4f& color);
-	GameObject(Renderer * pRenderer, float x, float y, float z, float size, float r, float g, float b, float a);
+	GameObject(Renderer* pRenderer);
+	GameObject(Renderer* pRenderer, const Vec3f& pos, float size, const Vec4f& color);
+	GameObject(Renderer* pRenderer, float x, float y, float z, float size, float r, float g, float b, float a);
 	virtual ~GameObject();
 
 	virtual void Update(const double TimeElapsed) = 0;

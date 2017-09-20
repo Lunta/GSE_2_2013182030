@@ -3,23 +3,23 @@
 
 class TestObject;
 
-class MainScene : public Scene
+class MainScene final : public Scene
 {
 private:
 	TestObject* m_pTestObject;
 
 public:
 	MainScene(const Type& tag);
-	virtual ~MainScene();
+	virtual ~MainScene() override;
 
-	virtual void BuildObjects();
-	virtual void ReleaseObjects();
+	virtual void BuildObjects() override;
+	virtual void ReleaseObjects() override;
 
-	virtual void Update(const double TimeElapsed);
-	virtual void Render();
+	virtual void Update(const double TimeElapsed) override;
+	virtual void Render() override;
 
-	virtual void Input_Key(unsigned char key, int x, int y);
-	virtual void Input_SpecialKey(int key, int x, int y);
-	virtual void Input_MouseButton(int button, int BottonPress, int x, int y);
+	virtual void Input_Key(unsigned char key, int x, int y) override;
+	virtual void Input_SpecialKey(int key, int x, int y) override;
+	virtual void Input_MouseButton(int button, int state, int x, int y) override;
 };
 

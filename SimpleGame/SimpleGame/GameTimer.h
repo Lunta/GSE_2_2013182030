@@ -4,7 +4,7 @@ class GameTimer final
 {
 private:
 	std::chrono::system_clock::time_point	m_tpCurrentTime;
-	std::chrono::duration<double>			m_dTimeElapsed; // 시간이 얼마나 지났나
+	std::chrono::duration<double>			m_dTimeElapsed;
 	double									m_dFps;
 
 private:
@@ -19,7 +19,7 @@ public:
 	int GetFPS() { return (int)m_dFps; };
 
 public:
-	static GameTimer* GetInstance();
+	static GameTimer& GetInstance();
 };
 
-static GameTimer* Timer = GameTimer::GetInstance();
+static GameTimer& Timer = GameTimer::GetInstance();

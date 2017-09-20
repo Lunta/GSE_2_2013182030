@@ -13,7 +13,7 @@ TitleScene::~TitleScene()
 void TitleScene::BuildObjects()
 {
 	Scene::BuildObjects();
-
+	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
 	m_pTestObject = new TestObject(m_pRenderer, 0, 0, 0, 4, 1, 0, 1, 1);
 }
 
@@ -29,6 +29,12 @@ void TitleScene::Update(const double TimeElapsed)
 
 void TitleScene::Render()
 {
+	glClearColor(
+		m_vec4fBackgroundColor.r, 
+		m_vec4fBackgroundColor.g, 
+		m_vec4fBackgroundColor.b, 
+		m_vec4fBackgroundColor.a);
+
 	m_pTestObject->Render();
 }
 
@@ -41,7 +47,7 @@ void TitleScene::Input_Key(unsigned char key, int x, int y)
 	case KEY_BACKSPACE:
 		break;
 	case KEY_SPACE:
-		GameFramework->ChangeScene(Scene::Type::Main);
+		GameFramework.ChangeScene(Scene::Type::Main);
 		break;
 	case KEY_ENTER:
 		break;
@@ -73,7 +79,7 @@ void TitleScene::Input_SpecialKey(int key, int x, int y)
 	}
 }
 
-void TitleScene::Input_MouseButton(int button, int BottonPress, int x, int y)
+void TitleScene::Input_MouseButton(int button, int state, int x, int y)
 {
 	switch (button)
 	{

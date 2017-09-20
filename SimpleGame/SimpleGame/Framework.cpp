@@ -19,9 +19,13 @@ void Framework::Init(int client_width, int client_height)
 {
 	m_iClientWidth = client_width;
 	m_iClientHeight = client_height;
-	Timer->Init();
+
+	Timer.Init();
+
 	BuildScenes();
 	BuildObjects();
+
+	std::cout << "\n\n The game framework is ready to run.\n";
 }
 
 void Framework::BuildObjects()
@@ -57,10 +61,8 @@ void Framework::Update(double TimeElapsed)
 
 void Framework::Render()
 {
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 	if (m_pCurrentScene)
 		m_pCurrentScene->Render();
-	
 }
 
 void Framework::Input_Key(unsigned char key, int x, int y)
@@ -109,13 +111,13 @@ void Framework::Input_SpecialKey(int key, int x, int y)
 		}
 }
 
-/*   BottonPress        */
+/*    BUTTON_STATE    */
 // - MOUSE_BUTTON_UP
 // - MOUSE_BUTTON_DOWN
-void Framework::Input_MouseButton(int button, int BottonPress, int x, int y)
+void Framework::Input_MouseButton(int button, int state, int x, int y)
 {
 	if(m_pCurrentScene)
-		m_pCurrentScene->Input_MouseButton(button, BottonPress, x, y);
+		m_pCurrentScene->Input_MouseButton(button, state, x, y);
 	else
 		switch (button)
 		{
@@ -137,7 +139,7 @@ void Framework::Input_MouseButton(int button, int BottonPress, int x, int y)
 const char * Framework::GetTitleStr()
 {
 	m_strTitle = std::string(CLIENT_TITLE) + " (FPS " + 
-		std::to_string((int)Timer->GetFPS()) + ")";
+		std::to_string((int)Timer.GetFPS()) + ")";
 	return m_strTitle.data();
 }
 
@@ -151,10 +153,8 @@ const int Framework::GetClientHeight()
 	return m_iClientHeight;
 }
 
-Framework* Framework::GetInstance()
+Framework& Framework::GetInstance()
 {
-	static Framework* instance = nullptr;
-	if (!instance)
-		instance = new Framework();
+	static Framework instance;
 	return instance;
 }

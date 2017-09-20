@@ -53,16 +53,8 @@ inline constexpr auto GetEnumValueByType(Enum enumerator) noexcept
 template <typename Ty>
 struct Vector3D {
 	union {
-		struct {
-			Ty x;
-			Ty y;
-			Ty z;
-		};
-		struct {
-			Ty r;
-			Ty g;
-			Ty b;
-		};
+		struct { Ty x, y, z; };
+		struct { Ty r, g, b; };
 		Ty arrPos[3];
 		Ty arrColor[3];
 	};
@@ -73,18 +65,8 @@ using Vec3i = Vector3D<int>;
 template <typename Ty>
 struct Vector4D {
 	union {
-		struct {
-			Ty x;
-			Ty y;
-			Ty z;
-			Ty w;
-		};
-		struct {
-			Ty r;
-			Ty g;
-			Ty b;
-			Ty a;
-		};
+		struct { Ty x, y, z, w; };
+		struct { Ty r, g, b, a; };
 		Ty arrPos[4];
 		Ty arrColor[4];
 	};

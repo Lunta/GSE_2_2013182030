@@ -27,14 +27,14 @@ public:
 
 	void Input_Key(unsigned char key, int x, int y);
 	void Input_SpecialKey(int key, int x, int y);
-	void Input_MouseButton(int button, int BottonPress, int x, int y);
+	void Input_MouseButton(int button, int state, int x, int y);
 
 	const char* GetTitleStr();
 	const int GetClientWidth();
 	const int GetClientHeight();
 
 public:
-	static Framework* GetInstance();
+	static Framework& GetInstance();
 };
 
-static Framework* GameFramework = Framework::GetInstance();
+static Framework& GameFramework = Framework::GetInstance();

@@ -15,42 +15,42 @@ but WITHOUT ANY WARRANTY.
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	GameFramework->Render();
+	GameFramework.Render();
 	glutSwapBuffers();
 }
 
 void Idle(void)
 {
-	if (Timer->GetTick())
+	if (Timer.GetTick())
 	{
-		GameFramework->Update(Timer->GetTimeElapsed());
+		GameFramework.Update(Timer.GetTimeElapsed());
 		RenderScene();
 	}
 	else return;
 
-	glutSetWindowTitle(GameFramework->GetTitleStr());
+	glutSetWindowTitle(GameFramework.GetTitleStr());
 }
 
 // 키보드 전반
 void KeyInput(unsigned char key, int x, int y)
 {
-	GameFramework->Input_Key(key, x, y);
+	GameFramework.Input_Key(key, x, y);
 	//std::cout << "KeyInput Key: " << key << " X: " << x << " Y: " << y << std::endl;
 }
 
 // 방향키, 쉬프트, 컨트롤
 void SpecialKeyInput(int key, int x, int y)
 {
-	GameFramework->Input_SpecialKey(key, x, y);
+	GameFramework.Input_SpecialKey(key, x, y);
 	//std::cout << "Special Key Input Key: " << key << " X: " << x << " Y: " << y << std::endl;
 }
 
 // 마우스 클릭 및 클릭시 좌표
-void MouseInput(int button, int BottonPress, int x, int y)
+void MouseInput(int button, int state, int x, int y)
 {
-	GameFramework->Input_MouseButton(button, BottonPress, x, y);
+	GameFramework.Input_MouseButton(button, state, x, y);
 	//std::cout << "Mouse Input Button: " << button
-	//	<< " BottonPress: " << BottonPress << " X: " << x << " Y: " << y << std::endl;
+	//	<< " state: " << state << " X: " << x << " Y: " << y << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 	glutSpecialFunc(SpecialKeyInput);
 	glutMouseFunc(MouseInput);
 
-	GameFramework->Init(CLIENT_WIDTH, CLIENT_HEIGHT);
+	GameFramework.Init(CLIENT_WIDTH, CLIENT_HEIGHT);
 
 	glutMainLoop();
 
