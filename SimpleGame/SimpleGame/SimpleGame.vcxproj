@@ -171,6 +171,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TestObject.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />

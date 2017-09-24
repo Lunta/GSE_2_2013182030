@@ -17,7 +17,7 @@ void MainScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
-	m_pTestObject = new TestObject(m_pRenderer, 0, 0, 0, 5, 1, 0, 1, 1);
+	m_pTestObject = new TestObject(0, 0, 0, 5, 1, 0, 1, 1);
 }
 
 void MainScene::ReleaseObjects()
@@ -38,7 +38,7 @@ void MainScene::Render()
 		m_vec4fBackgroundColor.b,
 		m_vec4fBackgroundColor.a);
 
-	m_pTestObject->Render();
+	m_pTestObject->Render(m_pRenderer);
 }
 
 void MainScene::Input_Key(unsigned char key, int x, int y)

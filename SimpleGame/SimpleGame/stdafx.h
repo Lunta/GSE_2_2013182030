@@ -50,26 +50,4 @@ inline constexpr auto GetEnumValueByType(Enum enumerator) noexcept
 	return static_cast<std::underlying_type_t<Enum>>(enumerator);
 }
 
-template <typename Ty>
-struct Vector3D {
-	union {
-		struct { Ty x, y, z; };
-		struct { Ty r, g, b; };
-		Ty arrPos[3];
-		Ty arrColor[3];
-	};
-};
-using Vec3f = Vector3D<float>; 
-using Vec3i = Vector3D<int>;
-
-template <typename Ty>
-struct Vector4D {
-	union {
-		struct { Ty x, y, z, w; };
-		struct { Ty r, g, b, a; };
-		Ty arrPos[4];
-		Ty arrColor[4];
-	};
-};
-using Vec4f = Vector4D<float>; 
-using Vec4i = Vector4D<int>;
+#include "Vector.h"
