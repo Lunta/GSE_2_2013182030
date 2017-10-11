@@ -93,9 +93,14 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 	case MOUSE_LEFT_BUTTON:
 		if (state == MOUSE_BUTTON_UP)
 		{
-			m_listpTestObject.push_back(new TestObject(
-				x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0, 
-				5, 1, 0, 1, 1));
+			TestObject* obj = new TestObject(
+				x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
+				5, 1, 0, 1, 1);
+			obj->SetDirection(
+				(1 - 2*(rand() % 2))*(rand() % 100 / 100.0), 
+				(1 - 2*(rand() % 2))*(rand() % 100 / 100.0));
+			obj->SetSpeed(50);
+			m_listpTestObject.push_back(obj);
 		}
 		break;
 	case MOUSE_WHEEL_BUTTON:
