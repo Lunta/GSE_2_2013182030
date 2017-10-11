@@ -24,6 +24,7 @@ TestObject::~TestObject()
 
 void TestObject::Update(const double TimeElapsed)
 {
+	m_vec3fPos += m_vec3fDirection * m_fSpeed * TimeElapsed;
 }
 
 void TestObject::Render(Renderer * pRenderer)

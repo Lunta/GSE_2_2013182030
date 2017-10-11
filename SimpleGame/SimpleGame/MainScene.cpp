@@ -11,23 +11,26 @@ MainScene::MainScene(const Type& tag) : Scene(tag)
 
 MainScene::~MainScene()
 {
+	ReleaseObjects();
 }
 
 void MainScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
-	m_pTestObject = new TestObject(0, 0, 0, 5, 1, 0, 1, 1);
 }
 
 void MainScene::ReleaseObjects()
 {
-	delete m_pTestObject;
+	for (auto& p : m_listpTestObject)
+		delete p;
+	m_listpTestObject.clear();
 }
 
 void MainScene::Update(const double TimeElapsed)
 {
-	m_pTestObject->Update(TimeElapsed);
+	for (auto& p : m_listpTestObject)
+		p->Update(TimeElapsed);
 }
 
 void MainScene::Render()
@@ -38,7 +41,8 @@ void MainScene::Render()
 		m_vec4fBackgroundColor.b,
 		m_vec4fBackgroundColor.a);
 
-	m_pTestObject->Render(m_pRenderer);
+	for (auto& p : m_listpTestObject)
+		p->Render(m_pRenderer);
 }
 
 void MainScene::Input_Key(unsigned char key, int x, int y)
@@ -87,6 +91,12 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 	switch (button)
 	{
 	case MOUSE_LEFT_BUTTON:
+		if (state == MOUSE_BUTTON_UP)
+		{
+			m_listpTestObject.push_back(new TestObject(
+				x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0, 
+				5, 1, 0, 1, 1));
+		}
 		break;
 	case MOUSE_WHEEL_BUTTON:
 		break;

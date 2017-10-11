@@ -8,6 +8,9 @@ protected:
 	Vec4f		m_vec4fColor;
 	float		m_fSize;
 
+	Vec3f		m_vec3fDirection;
+	float		m_fSpeed;
+
 public:
 	GameObject();
 	GameObject(const Vec3f& pos, float size, const Vec4f& color);
@@ -24,5 +27,8 @@ public:
 	void SetColor(const Vec4f& color);
 	void SetColor(float r, float g, float b, float a);
 	void SetSize(float size);
+	void SetDirection(const Vec3f& direction);
+	void SetDirection(float x, float y, float z = 0);
+	void SetSpeed(float speed);
 };
 

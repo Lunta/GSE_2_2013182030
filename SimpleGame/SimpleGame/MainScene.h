@@ -6,7 +6,7 @@ class TestObject;
 class MainScene final : public Scene
 {
 private:
-	TestObject* m_pTestObject;
+	std::list<TestObject*> m_listpTestObject;
 
 public:
 	MainScene(const Type& tag);

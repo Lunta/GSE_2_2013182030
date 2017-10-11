@@ -42,7 +42,7 @@ void Framework::BuildScenes()
 	m_pSceneArr[SceneTypeToIdx(Main)] = new MainScene(Scene::Type::Main);
 	m_pSceneArr[SceneTypeToIdx(Main)]->BuildObjects();
 
-	m_pCurrentScene = m_pSceneArr[SceneTypeToIdx(Title)];
+	m_pCurrentScene = m_pSceneArr[SceneTypeToIdx(Main)];
 }
 
 void Framework::ChangeScene(const Scene::Type & type)
