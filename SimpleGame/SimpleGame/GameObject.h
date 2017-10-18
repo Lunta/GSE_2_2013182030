@@ -1,4 +1,5 @@
 #pragma once
+#include "BindingBox.h"
 class Renderer;
 
 class GameObject
@@ -11,6 +12,7 @@ protected:
 	Vec3f		m_vec3fDirection;
 	float		m_fSpeed;
 
+	BindingBox	m_BindingBox;
 	bool		m_bIsCollision;
 
 public:
@@ -35,8 +37,9 @@ public:
 	void SetDirection(float x, float y, float z = 0);
 	void SetSpeed(float speed);
 
-	const Vec3f& GetPos() const { return m_vec3fPos; }
-	const float& GetSize() const { return m_fSize; }
+	const Vec3f&		GetPos() const { return m_vec3fPos; }
+	const float&		GetSize() const { return m_fSize; }
+	const BindingBox&	GetBindingBox() const { return m_BindingBox; }
 
 	bool IsCollide() const { return m_bIsCollision; }
 };

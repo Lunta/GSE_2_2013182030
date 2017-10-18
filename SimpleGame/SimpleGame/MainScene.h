@@ -24,6 +24,4 @@ public:
 	virtual void Input_Key(unsigned char key, int x, int y) override;
 	virtual void Input_SpecialKey(int key, int x, int y) override;
 	virtual void Input_MouseButton(int button, int state, int x, int y) override;
-
-	bool IsCollision(GameObject* a, GameObject* b);
 };

@@ -50,7 +50,7 @@ void MainScene::Update(const double TimeElapsed)
 		for (auto& q : m_vecpTestObjects)
 		{
 			if (p == q) continue;
-			if (IsCollision(p, q))
+			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
 			{
 				p->Collide();
 				q->Collide();
@@ -143,27 +143,4 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 	default:
 		break;
 	}
-}
-
-bool MainScene::IsCollision(GameObject * a, GameObject * b)
-{
-	Vec3f vecPosA = a->GetPos();
-	float fSizeOffsetA = a->GetSize() / 2.f;
-	Vec3f vecPosB = b->GetPos();
-	float fSizeOffsetB = b->GetSize() / 2.f;
-	RECT RcA;
-	RcA.left	= vecPosA.x - fSizeOffsetA;
-	RcA.right	= vecPosA.y + fSizeOffsetA;
-	RcA.bottom	= vecPosA.x + fSizeOffsetA;
-	RcA.top		= vecPosA.y - fSizeOffsetA;
-	RECT RcB;
-	RcB.left	= vecPosB.x - fSizeOffsetB;
-	RcB.right	= vecPosB.y + fSizeOffsetB;
-	RcB.bottom	= vecPosB.x + fSizeOffsetB;
-	RcB.top		= vecPosB.y - fSizeOffsetB;
-	if (RcA.left	> RcB.right	) return false;
-	if (RcA.right	< RcB.left	) return false;
-	if (RcA.bottom	> RcB.top	) return false;
-	if (RcA.top		< RcB.bottom) return false;
-		return true;
 }

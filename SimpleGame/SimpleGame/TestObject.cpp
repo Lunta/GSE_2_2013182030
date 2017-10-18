@@ -28,8 +28,10 @@ TestObject::~TestObject()
 void TestObject::Update(const double TimeElapsed)
 {
 	m_vec3fPos += m_vec3fDirection * m_fSpeed * TimeElapsed;
+	m_BindingBox.SetPos(m_vec3fPos);
 	if (m_bIsCollision)
 	{
+		m_vec4fColor = Vec4f{ 1, 0, 0, 1 };
 		m_fCollisionTimer += TimeElapsed;
 		if (m_fCollisionTimer > COLLISION_TIME)
 		{
