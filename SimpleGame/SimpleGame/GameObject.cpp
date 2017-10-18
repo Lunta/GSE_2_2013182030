@@ -5,7 +5,7 @@
 
 GameObject::GameObject() :
 	m_vec3fPos({ 0, 0, 0 }), 
-	m_vec4fColor({ 0, 0, 0, 0 }), 
+	m_vec4fColor({ 0, 0, 0, 1 }), 
 	m_fSize(0.0f),
 	m_vec3fDirection(0, 0, 0),
 	m_fSpeed(0.0f)
@@ -29,6 +29,12 @@ GameObject::GameObject(float x, float y, float z, float size, float r, float g, 
 }
 GameObject::~GameObject()
 {
+}
+
+void GameObject::Collide()
+{
+	m_bIsCollision = true;
+	m_vec4fColor = Vec4f{ 1, 0, 0, 1 };
 }
 
 void GameObject::SetParameter(const Vec3f& pos, float size, const Vec4f& color)

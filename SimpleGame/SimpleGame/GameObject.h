@@ -11,6 +11,8 @@ protected:
 	Vec3f		m_vec3fDirection;
 	float		m_fSpeed;
 
+	bool		m_bIsCollision;
+
 public:
 	GameObject();
 	GameObject(const Vec3f& pos, float size, const Vec4f& color);
@@ -19,6 +21,8 @@ public:
 
 	virtual void Update(const double TimeElapsed) = 0;
 	virtual void Render(Renderer* pRenderer) = 0;
+
+	void Collide();
 
 	void SetParameter(const Vec3f& pos, float size, const Vec4f& color);
 	void SetParameter(float x, float y, float z, float size, float r, float g, float b, float a);
@@ -30,5 +34,12 @@ public:
 	void SetDirection(const Vec3f& direction);
 	void SetDirection(float x, float y, float z = 0);
 	void SetSpeed(float speed);
+
+	const Vec3f& GetPos() const { return m_vec3fPos; }
+	const float& GetSize() const { return m_fSize; }
+
+	bool IsCollide() const { return m_bIsCollision; }
 };
+
+
 

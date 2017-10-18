@@ -1,8 +1,12 @@
 #pragma once
 #include "GameObject.h"
 
+#define COLLISION_TIME 0.2f
+
 class TestObject : public GameObject
 {
+private:
+	float m_fCollisionTimer;
 public:
 	TestObject();
 	TestObject(const Vec3f& pos, float size, const Vec4f& color);

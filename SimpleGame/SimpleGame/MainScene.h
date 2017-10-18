@@ -1,12 +1,15 @@
 #pragma once
 #include "Scene.h"
 
+#define MAX_OBJECTS_COUNT 50
+
+class GameObject;
 class TestObject;
 
 class MainScene final : public Scene
 {
 private:
-	std::list<TestObject*> m_listpTestObject;
+	std::vector<TestObject*> m_vecpTestObjects;
 
 public:
 	MainScene(const Type& tag);
@@ -21,5 +24,6 @@ public:
 	virtual void Input_Key(unsigned char key, int x, int y) override;
 	virtual void Input_SpecialKey(int key, int x, int y) override;
 	virtual void Input_MouseButton(int button, int state, int x, int y) override;
-};
 
+	bool IsCollision(GameObject* a, GameObject* b);
+};

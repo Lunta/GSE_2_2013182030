@@ -18,19 +18,44 @@ void MainScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
+	m_vecpTestObjects.reserve(MAX_OBJECTS_COUNT);
+	while(m_vecpTestObjects.size() < MAX_OBJECTS_COUNT)
+	{
+		TestObject* obj = new TestObject(
+			0, 0, 0,
+			20, 1, 1, 1, 1);
+		obj->SetDirection(
+			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
+			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
+		obj->SetSpeed(50);
+		obj->SetColor(1, 1, 1, 1);
+		m_vecpTestObjects.push_back(obj);
+	}
 }
 
 void MainScene::ReleaseObjects()
 {
-	for (auto& p : m_listpTestObject)
+	for (auto& p : m_vecpTestObjects)
 		delete p;
-	m_listpTestObject.clear();
+	m_vecpTestObjects.clear();
 }
 
 void MainScene::Update(const double TimeElapsed)
 {
-	for (auto& p : m_listpTestObject)
+	for (auto& p : m_vecpTestObjects)
+	{
 		p->Update(TimeElapsed);
+	}
+	for (auto& p : m_vecpTestObjects)
+		for (auto& q : m_vecpTestObjects)
+		{
+			if (p == q) continue;
+			if (IsCollision(p, q))
+			{
+				p->Collide();
+				q->Collide();
+			}
+		}
 }
 
 void MainScene::Render()
@@ -41,7 +66,7 @@ void MainScene::Render()
 		m_vec4fBackgroundColor.b,
 		m_vec4fBackgroundColor.a);
 
-	for (auto& p : m_listpTestObject)
+	for (auto& p : m_vecpTestObjects)
 		p->Render(m_pRenderer);
 }
 
@@ -93,14 +118,18 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 	case MOUSE_LEFT_BUTTON:
 		if (state == MOUSE_BUTTON_UP)
 		{
-			TestObject* obj = new TestObject(
-				x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
-				5, 1, 0, 1, 1);
-			obj->SetDirection(
-				(1 - 2*(rand() % 2))*(rand() % 100 / 100.0), 
-				(1 - 2*(rand() % 2))*(rand() % 100 / 100.0));
-			obj->SetSpeed(50);
-			m_listpTestObject.push_back(obj);
+			if (m_vecpTestObjects.size() < MAX_OBJECTS_COUNT)
+			{
+				TestObject* obj = new TestObject(
+					x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
+					5, 1, 0, 1, 1);
+				obj->SetDirection(
+					(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
+					(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
+				obj->SetSpeed(50);
+				obj->SetColor(1, 1, 1, 1);
+				m_vecpTestObjects.push_back(obj);
+			}
 		}
 		break;
 	case MOUSE_WHEEL_BUTTON:
@@ -114,4 +143,27 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 	default:
 		break;
 	}
+}
+
+bool MainScene::IsCollision(GameObject * a, GameObject * b)
+{
+	Vec3f vecPosA = a->GetPos();
+	float fSizeOffsetA = a->GetSize() / 2.f;
+	Vec3f vecPosB = b->GetPos();
+	float fSizeOffsetB = b->GetSize() / 2.f;
+	RECT RcA;
+	RcA.left	= vecPosA.x - fSizeOffsetA;
+	RcA.right	= vecPosA.y + fSizeOffsetA;
+	RcA.bottom	= vecPosA.x + fSizeOffsetA;
+	RcA.top		= vecPosA.y - fSizeOffsetA;
+	RECT RcB;
+	RcB.left	= vecPosB.x - fSizeOffsetB;
+	RcB.right	= vecPosB.y + fSizeOffsetB;
+	RcB.bottom	= vecPosB.x + fSizeOffsetB;
+	RcB.top		= vecPosB.y - fSizeOffsetB;
+	if (RcA.left	> RcB.right	) return false;
+	if (RcA.right	< RcB.left	) return false;
+	if (RcA.bottom	> RcB.top	) return false;
+	if (RcA.top		< RcB.bottom) return false;
+		return true;
 }
