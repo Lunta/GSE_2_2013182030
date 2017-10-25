@@ -170,7 +170,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TestObject.h" />
+    <ClInclude Include="BoxObject.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
@@ -189,7 +189,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TestObject.cpp" />
+    <ClCompile Include="BoxObject.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

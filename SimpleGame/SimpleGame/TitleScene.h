@@ -1,12 +1,12 @@
 #pragma once
 #include "Scene.h"
 
-class TestObject;
+class GameObject;
 
 class TitleScene final : public Scene
 {
 private:
-	TestObject* m_pTestObject;
+	GameObject* m_pTestObject;
 
 public:
 	TitleScene(const Type& tag);

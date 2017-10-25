@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "TestObject.h"
+#include "BoxObject.h"
 #include "MainScene.h"
 #include "Framework.h"
 
@@ -7,8 +7,6 @@
 MainScene::MainScene(const Type& tag) : Scene(tag)
 {
 }
-
-
 MainScene::~MainScene()
 {
 	ReleaseObjects();
@@ -18,9 +16,9 @@ void MainScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
-	while(m_pTestObjectsList.size() < MAX_OBJECTS_COUNT)
+	while(m_pTestObjectsList.size() < MAX_OBJECTS_COUNT / 2)
 	{
-		TestObject* obj = new TestObject(
+		GameObject* obj = new BoxObject(
 			0, 0, 0,
 			10, 1, 1, 1, 1);
 		obj->SetDirection(
@@ -35,7 +33,7 @@ void MainScene::BuildObjects()
 void MainScene::ReleaseObjects()
 {
 	for (auto& p : m_pTestObjectsList)
-		delete p;
+		if(p) delete p;
 	m_pTestObjectsList.clear();
 }
 
@@ -124,7 +122,7 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 		{
 			if (m_pTestObjectsList.size() < MAX_OBJECTS_COUNT)
 			{
-				TestObject* obj = new TestObject(
+				GameObject* obj = new BoxObject(
 					x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
 					10, 1, 0, 1, 1);
 				obj->SetDirection(

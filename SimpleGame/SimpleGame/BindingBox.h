@@ -17,6 +17,9 @@ public:
 	void SetPos(const Vec3f& pos);
 	void SetPos(const float x, const float y);
 	void SetSize(const float size);
+	
+	void UpdateBox();
+
 	bool CheckCollision(const BindingBox& otherBox) const;
 };
 

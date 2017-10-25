@@ -37,10 +37,10 @@
     <Filter Include="GameObject">
       <UniqueIdentifier>{3bc045fc-3334-4fd5-bbb1-0143244f5466}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject\TestObject">
+    <Filter Include="GameObject\BoxObject">
       <UniqueIdentifier>{391497e0-501a-47db-9b4e-675485c88fd4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BindingBox">
+    <Filter Include="GameObject\BindingBox">
       <UniqueIdentifier>{ba37c289-8266-46d4-9950-fa5a8534ea14}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -75,14 +75,14 @@
     <ClInclude Include="GameObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="TestObject.h">
-      <Filter>GameObject\TestObject</Filter>
-    </ClInclude>
     <ClInclude Include="Vector.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="BindingBox.h">
-      <Filter>BindingBox</Filter>
+      <Filter>GameObject\BindingBox</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxObject.h">
+      <Filter>GameObject\BoxObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -113,11 +113,11 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="TestObject.cpp">
-      <Filter>GameObject\TestObject</Filter>
-    </ClCompile>
     <ClCompile Include="BindingBox.cpp">
-      <Filter>BindingBox</Filter>
+      <Filter>GameObject\BindingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxObject.cpp">
+      <Filter>GameObject\BoxObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

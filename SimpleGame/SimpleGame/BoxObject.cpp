@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "TestObject.h"
+#include "BoxObject.h"
 #include "Renderer.h"
 
-TestObject::TestObject() 
+BoxObject::BoxObject()
 	: GameObject()
 {
 }
 
-TestObject::TestObject(
+BoxObject::BoxObject(
 	  const Vec3f & pos
 	, float size
 	, const Vec4f & color)
@@ -15,7 +15,7 @@ TestObject::TestObject(
 {
 }
 
-TestObject::TestObject(
+BoxObject::BoxObject(
 	  float x, float y, float z
 	, float size
 	, float r, float g, float b, float a)
@@ -23,11 +23,11 @@ TestObject::TestObject(
 {
 }
 
-TestObject::~TestObject()
+BoxObject::~BoxObject()
 {
 }
 
-void TestObject::Update(const double TimeElapsed)
+void BoxObject::Update(const double TimeElapsed)
 {
 	m_vec3fPos += m_vec3fDirection * m_fSpeed * TimeElapsed;
 	m_fLife -= TimeElapsed;
@@ -53,7 +53,7 @@ void TestObject::Update(const double TimeElapsed)
 		m_vec3fDirection.y = -m_vec3fDirection.y;
 }
 
-void TestObject::Render(Renderer * pRenderer)
+void BoxObject::Render(Renderer * pRenderer)
 {
 	// Renderer Test
 	pRenderer->DrawSolidRect(
@@ -61,7 +61,7 @@ void TestObject::Render(Renderer * pRenderer)
 		m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a);
 }
 
-void TestObject::Collide()
+void BoxObject::Collide()
 {
 	m_bIsCollision = true;
 	m_fCollisionTimer = 0.0f;
