@@ -13,6 +13,8 @@ Framework::Framework() : m_pCurrentScene(nullptr)
 }
 Framework::~Framework()
 {
+	for (int i = 0; i < SceneTypeToIdx(Count); ++i)
+		if(m_pSceneArr[i]) delete m_pSceneArr[i];
 }
 
 void Framework::Init(int client_width, int client_height)
@@ -30,8 +32,6 @@ void Framework::Init(int client_width, int client_height)
 
 void Framework::BuildObjects()
 {
-	if (m_pCurrentScene)
-		m_pCurrentScene->BuildObjects();
 }
 
 void Framework::BuildScenes()
@@ -141,16 +141,6 @@ const char * Framework::GetTitleStr()
 	m_strTitle = std::string(CLIENT_TITLE) + " (FPS " + 
 		std::to_string((int)Timer.GetFPS()) + ")";
 	return m_strTitle.data();
-}
-
-const int Framework::GetClientWidth()
-{
-	return m_iClientWidth;
-}
-
-const int Framework::GetClientHeight()
-{
-	return m_iClientHeight;
 }
 
 Framework& Framework::GetInstance()

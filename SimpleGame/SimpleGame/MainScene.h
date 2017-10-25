@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.h"
 
-#define MAX_OBJECTS_COUNT 10
+#define MAX_OBJECTS_COUNT 3000
 
 class GameObject;
 

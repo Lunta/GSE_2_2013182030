@@ -4,15 +4,16 @@
 class Framework final
 {
 private:
-	std::string m_strTitle;
-	int			m_iClientWidth;
-	int			m_iClientHeight;
+	std::string			m_strTitle;
+	int					m_iClientWidth;
+	int					m_iClientHeight;
 
-	Scene*		m_pSceneArr[SceneTypeToIdx(Count)];
-	Scene*		m_pCurrentScene;
+	Scene*				m_pSceneArr[SceneTypeToIdx(Count)];
+	Scene*				m_pCurrentScene;
 
 private:
 	Framework();
+	Framework(const Framework& _framework) = delete;
 
 public:
 	~Framework();
@@ -30,8 +31,8 @@ public:
 	void Input_MouseButton(int button, int state, int x, int y);
 
 	const char* GetTitleStr();
-	const int GetClientWidth();
-	const int GetClientHeight();
+	const int GetClientWidth() const { return m_iClientWidth; }
+	const int GetClientHeight() const { return m_iClientHeight; }
 
 public:
 	static Framework& GetInstance();

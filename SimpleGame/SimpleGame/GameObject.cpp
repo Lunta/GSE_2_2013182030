@@ -100,12 +100,12 @@ void GameObject::SetSize(float size)
 
 void GameObject::SetDirection(const Vec3f & direction)
 {
-	m_vec3fDirection = direction;
+	m_vec3fDirection = Normalize(Vec3f(direction));
 }
 
 void GameObject::SetDirection(float x, float y, float z)
 {
-	m_vec3fDirection = { x, y, z };
+	m_vec3fDirection = Normalize(Vec3f{ x, y, z });
 }
 
 void GameObject::SetSpeed(float speed)

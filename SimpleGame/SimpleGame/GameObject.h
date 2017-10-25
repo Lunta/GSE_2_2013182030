@@ -1,8 +1,8 @@
 #pragma once
 #include "BindingBox.h"
 
-#define DEFAULT_MAX_LIFE	10.0f
-#define DEFAULT_LIFE_TIME	5.0f
+#define DEFAULT_MAX_LIFE	5.0f
+#define DEFAULT_LIFE_TIME	10000.0f
 #define COLLISION_TIME		0.1f
 
 class Renderer;
@@ -10,19 +10,19 @@ class Renderer;
 class GameObject
 {
 protected:
-	Vec3f		m_vec3fPos;
-	Vec4f		m_vec4fColor;
-	float		m_fSize;
+	Vec3f				m_vec3fPos;
+	Vec4f				m_vec4fColor;
+	float				m_fSize;
 
-	Vec3f		m_vec3fDirection;
-	float		m_fSpeed;
+	Vec3f				m_vec3fDirection;
+	float				m_fSpeed;
 
-	BindingBox	m_BindingBox;
-	bool		m_bIsCollision;
+	BindingBox			m_BindingBox;
+	bool				m_bIsCollision;
 
-	float		m_fLife;
-	float		m_fLifeTimer;
-	float		m_fCollisionTimer;
+	float				m_fLife;
+	float				m_fLifeTimer;
+	float				m_fCollisionTimer;
 
 public:
 	GameObject();

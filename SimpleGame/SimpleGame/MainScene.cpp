@@ -19,12 +19,13 @@ void MainScene::BuildObjects()
 	while(m_pTestObjectsList.size() < MAX_OBJECTS_COUNT / 2)
 	{
 		GameObject* obj = new BoxObject(
-			0, 0, 0,
-			10, 1, 1, 1, 1);
+			  (1 - 2 * (rand() % 2))*(rand() % CLIENT_WIDTH / 2.0)
+			, (1 - 2 * (rand() % 2))*(rand() % CLIENT_HEIGHT / 2.0)
+			, 0, 10, 1, 1, 1, 1);
 		obj->SetDirection(
 			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
-		obj->SetSpeed(50);
+		obj->SetSpeed(100);
 		obj->SetColor(1, 1, 1, 1);
 		m_pTestObjectsList.push_back(obj);
 	}
@@ -122,15 +123,18 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 		{
 			if (m_pTestObjectsList.size() < MAX_OBJECTS_COUNT)
 			{
-				GameObject* obj = new BoxObject(
-					x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
-					10, 1, 0, 1, 1);
-				obj->SetDirection(
-					(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
-					(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
-				obj->SetSpeed(50);
-				obj->SetColor(1, 1, 1, 1);
-				m_pTestObjectsList.push_back(obj);
+				for (int i = 0; i < 50; ++i)
+				{
+					GameObject* obj = new BoxObject(
+						x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
+						10, 1, 0, 1, 1);
+					obj->SetDirection(
+						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
+						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
+					obj->SetSpeed(100);
+					obj->SetColor(1, 1, 1, 1);
+					m_pTestObjectsList.push_back(obj);
+				}
 			}
 		}
 		break;

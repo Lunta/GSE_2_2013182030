@@ -6,7 +6,6 @@ BoxObject::BoxObject()
 	: GameObject()
 {
 }
-
 BoxObject::BoxObject(
 	  const Vec3f & pos
 	, float size
@@ -14,7 +13,6 @@ BoxObject::BoxObject(
 	: GameObject(pos, size, color)
 {
 }
-
 BoxObject::BoxObject(
 	  float x, float y, float z
 	, float size
@@ -22,7 +20,6 @@ BoxObject::BoxObject(
 	: GameObject(x, y, z, size, r, g, b, a)
 {
 }
-
 BoxObject::~BoxObject()
 {
 }

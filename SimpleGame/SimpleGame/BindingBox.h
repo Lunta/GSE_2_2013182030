@@ -6,7 +6,7 @@ private:
 	float	m_fSize;
 
 public:
-	RECT	rcBindingBox;
+	RECT	rc;
 	
 public:
 	BindingBox();
