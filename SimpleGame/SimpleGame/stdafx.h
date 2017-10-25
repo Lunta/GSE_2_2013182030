@@ -9,6 +9,7 @@
 #include <string>
 #include <chrono>
 #include <vector>
+#include <list>
 
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"

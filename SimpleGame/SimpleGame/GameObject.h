@@ -1,5 +1,10 @@
 #pragma once
 #include "BindingBox.h"
+
+#define DEFAULT_MAX_LIFE	10.0f
+#define DEFAULT_LIFE_TIME	5.0f
+#define COLLISION_TIME		0.1f
+
 class Renderer;
 
 class GameObject
@@ -15,6 +20,10 @@ protected:
 	BindingBox	m_BindingBox;
 	bool		m_bIsCollision;
 
+	float		m_fLife;
+	float		m_fLifeTimer;
+	float		m_fCollisionTimer;
+
 public:
 	GameObject();
 	GameObject(const Vec3f& pos, float size, const Vec4f& color);
@@ -24,7 +33,7 @@ public:
 	virtual void Update(const double TimeElapsed) = 0;
 	virtual void Render(Renderer* pRenderer) = 0;
 
-	void Collide();
+	virtual void Collide();
 
 	void SetParameter(const Vec3f& pos, float size, const Vec4f& color);
 	void SetParameter(float x, float y, float z, float size, float r, float g, float b, float a);
@@ -36,12 +45,16 @@ public:
 	void SetDirection(const Vec3f& direction);
 	void SetDirection(float x, float y, float z = 0);
 	void SetSpeed(float speed);
+	void SetLife(float life);
+	void SetLifeTime(float life_time);
 
 	const Vec3f&		GetPos() const { return m_vec3fPos; }
 	const float&		GetSize() const { return m_fSize; }
 	const BindingBox&	GetBindingBox() const { return m_BindingBox; }
 
 	bool IsCollide() const { return m_bIsCollision; }
+	bool IsDie() const {
+		return (m_fLifeTimer <= 0.0f || m_fLife <= 0.0f); }
 };
 
 

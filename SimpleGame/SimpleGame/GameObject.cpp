@@ -3,34 +3,43 @@
 #include "Renderer.h"
 
 
-GameObject::GameObject() :
-	m_vec3fPos({ 0, 0, 0 }),
-	m_vec4fColor({ 0, 0, 0, 1 }),
-	m_fSize(0.0f),
-	m_vec3fDirection(0, 0, 0),
-	m_fSpeed(0.0f),
-	m_BindingBox(),
-	m_bIsCollision(false)
+GameObject::GameObject() 
+	: m_vec3fPos({ 0, 0, 0 })
+	, m_vec4fColor({ 0, 0, 0, 1 })
+	, m_fSize(0.0f)
+	, m_vec3fDirection(0, 0, 0)
+	, m_fSpeed(0.0f)
+	, m_BindingBox()
+	, m_bIsCollision(false)
+	, m_fCollisionTimer(0)
+	, m_fLife(DEFAULT_MAX_LIFE)
+	, m_fLifeTimer(DEFAULT_LIFE_TIME)
 {
 }
-GameObject::GameObject(const Vec3f& pos, float size, const Vec4f& color) :
-	m_vec3fPos(pos),
-	m_vec4fColor(color),
-	m_fSize(size),
-	m_vec3fDirection(0, 0, 0),
-	m_fSpeed(0.0f),
-	m_BindingBox(pos, size),
-	m_bIsCollision(false)
+GameObject::GameObject(const Vec3f& pos, float size, const Vec4f& color)
+	: m_vec3fPos(pos)
+	, m_vec4fColor(color)
+	, m_fSize(size)
+	, m_vec3fDirection(0, 0, 0)
+	, m_fSpeed(0.0f)
+	, m_BindingBox(pos, size)
+	, m_bIsCollision(false)
+	, m_fCollisionTimer(0)
+	, m_fLife(DEFAULT_MAX_LIFE)
+	, m_fLifeTimer(DEFAULT_LIFE_TIME)
 {
 }
-GameObject::GameObject(float x, float y, float z, float size, float r, float g, float b, float a) :
-	m_vec3fPos({ x, y, z }),
-	m_vec4fColor({ r, g, b, a }),
-	m_fSize(size),
-	m_vec3fDirection(0, 0, 0),
-	m_fSpeed(0.0f),
-	m_BindingBox(x, y, size),
-	m_bIsCollision(false)
+GameObject::GameObject(float x, float y, float z, float size, float r, float g, float b, float a)
+	: m_vec3fPos({ x, y, z })
+	, m_vec4fColor({ r, g, b, a })
+	, m_fSize(size)
+	, m_vec3fDirection(0, 0, 0)
+	, m_fSpeed(0.0f)
+	, m_BindingBox(x, y, size)
+	, m_bIsCollision(false)
+	, m_fCollisionTimer(0)
+	, m_fLife(DEFAULT_MAX_LIFE)
+	, m_fLifeTimer(DEFAULT_LIFE_TIME)
 {	
 }
 GameObject::~GameObject()
@@ -40,6 +49,7 @@ GameObject::~GameObject()
 void GameObject::Collide()
 {
 	m_bIsCollision = true;
+	m_fCollisionTimer = 0.0f;
 }
 
 void GameObject::SetParameter(const Vec3f& pos, float size, const Vec4f& color)
@@ -101,4 +111,14 @@ void GameObject::SetDirection(float x, float y, float z)
 void GameObject::SetSpeed(float speed)
 {
 	m_fSpeed = speed;
+}
+
+void GameObject::SetLife(float life)
+{
+	m_fLife = life;
+}
+
+void GameObject::SetLifeTime(float life_time)
+{
+	m_fLifeTimer = life_time;
 }

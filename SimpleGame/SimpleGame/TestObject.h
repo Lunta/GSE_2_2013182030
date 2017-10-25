@@ -1,12 +1,12 @@
 #pragma once
 #include "GameObject.h"
 
-#define COLLISION_TIME 0.1f
+
 
 class TestObject : public GameObject
 {
 private:
-	float m_fCollisionTimer;
+
 public:
 	TestObject();
 	TestObject(const Vec3f& pos, float size, const Vec4f& color);
@@ -15,5 +15,7 @@ public:
 
 	virtual void Update(const double TimeElapsed);
 	virtual void Render(Renderer * pRenderer);
+
+	virtual void Collide();
 };
 

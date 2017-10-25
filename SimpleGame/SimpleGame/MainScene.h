@@ -1,15 +1,14 @@
 #pragma once
 #include "Scene.h"
 
-#define MAX_OBJECTS_COUNT 50
+#define MAX_OBJECTS_COUNT 10
 
 class GameObject;
-class TestObject;
 
 class MainScene final : public Scene
 {
 private:
-	std::vector<TestObject*> m_vecpTestObjects;
+	std::list<GameObject*> m_pTestObjectsList;
 
 public:
 	MainScene(const Type& tag);
