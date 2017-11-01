@@ -14,7 +14,7 @@ void TitleScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
-	m_pTestObject = new BoxObject(0, 0, 0, 4, 1, 0, 1, 1);
+	m_pTestObject = new BoxObject(0, 0, 0, 4, 1, 0, 1, 1, GameObject::ObjectType::OBJECT_BULLET);
 }
 
 void TitleScene::ReleaseObjects()
@@ -25,6 +25,14 @@ void TitleScene::ReleaseObjects()
 void TitleScene::Update(const double TimeElapsed)
 {
 	m_pTestObject->Update(TimeElapsed);
+}
+
+void TitleScene::PrepareUpdate(const double TimeElapsed)
+{
+}
+
+void TitleScene::PhysicsProcess(const double TimeElapsed)
+{
 }
 
 void TitleScene::Render()

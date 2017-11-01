@@ -43,6 +43,12 @@
     <Filter Include="GameObject\BindingBox">
       <UniqueIdentifier>{ba37c289-8266-46d4-9950-fa5a8534ea14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\BuildingObject">
+      <UniqueIdentifier>{835058c1-46b0-4b99-9fe2-166db439f5bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\CharactorObject">
+      <UniqueIdentifier>{8cad1e5d-0ced-424b-a2dd-a32472bab78e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -84,6 +90,12 @@
     <ClInclude Include="BoxObject.h">
       <Filter>GameObject\BoxObject</Filter>
     </ClInclude>
+    <ClInclude Include="BuildingObject.h">
+      <Filter>GameObject\BuildingObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CharactorObject.h">
+      <Filter>GameObject\CharactorObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SimpleGame.cpp">
@@ -118,6 +130,12 @@
     </ClCompile>
     <ClCompile Include="BoxObject.cpp">
       <Filter>GameObject\BoxObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingObject.cpp">
+      <Filter>GameObject\BuildingObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CharactorObject.cpp">
+      <Filter>GameObject\CharactorObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

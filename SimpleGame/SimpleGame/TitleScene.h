@@ -16,6 +16,8 @@ public:
 	virtual void ReleaseObjects() override;
 
 	virtual void Update(const double TimeElapsed) override;
+	virtual void PrepareUpdate(const double TimeElapsed) override;
+	virtual void PhysicsProcess(const double TimeElapsed) override;
 	virtual void Render() override;
 
 	virtual void Input_Key(unsigned char key, int x, int y) override;

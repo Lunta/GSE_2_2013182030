@@ -25,6 +25,8 @@ public:
 	virtual void ReleaseObjects();
 
 	virtual void Update(const double TimeElapsed) = 0;
+	virtual void PrepareUpdate(const double TimeElapsed) = 0;
+	virtual void PhysicsProcess(const double TimeElapsed) = 0;
 	virtual void Render() = 0;
 
 	virtual void Input_Key(unsigned char key, int x, int y) = 0;

@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "BoxObject.h"
 #include "MainScene.h"
 #include "Framework.h"
-
+#include "CharactorObject.h"
+#include "BuildingObject.h"
 
 MainScene::MainScene(const Type& tag) : Scene(tag)
 {
@@ -16,47 +16,96 @@ void MainScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
-	while(m_pTestObjectsList.size() < MAX_OBJECTS_COUNT / 2)
+
+	GameObject* obj = new BuildingObject(
+		0, 0, 0, 50, 1, 1, 0, 1, GameObject::ObjectType::OBJECT_BUILDING);
+	m_pBuildingList.push_back(obj);
+	while(m_pCharactorList.size() < MAX_OBJECTS_COUNT / 2)
 	{
-		GameObject* obj = new BoxObject(
+		GameObject* obj = new CharactorObject(
 			  (1 - 2 * (rand() % 2))*(rand() % CLIENT_WIDTH / 2.0)
 			, (1 - 2 * (rand() % 2))*(rand() % CLIENT_HEIGHT / 2.0)
-			, 0, 10, 1, 1, 1, 1);
+			, 0, 10, 0, 0, 1, 1, GameObject::ObjectType::OBJECT_CHARACTER);
 		obj->SetDirection(
 			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
 		obj->SetSpeed(100);
-		obj->SetColor(1, 1, 1, 1);
-		m_pTestObjectsList.push_back(obj);
+		m_pCharactorList.push_back(obj);
 	}
 }
 
 void MainScene::ReleaseObjects()
 {
-	for (auto& p : m_pTestObjectsList)
-		if(p) delete p;
-	m_pTestObjectsList.clear();
+	for (auto& p : m_pBuildingList)
+		if (p) delete p;
+	for (auto& p : m_pBulletList)
+		if (p) delete p;
+	for (auto& p : m_pCharactorList)
+		if (p) delete p;
+	m_pBuildingList.clear();
+	m_pBulletList.clear();
+	m_pCharactorList.clear();
 }
 
 void MainScene::Update(const double TimeElapsed)
 {
-	m_pTestObjectsList.remove_if(
+	PrepareUpdate(TimeElapsed);
+
+	for (auto& p : m_pBuildingList)
+		p->Update(TimeElapsed);
+	for (auto& p : m_pBulletList)
+		p->Update(TimeElapsed);
+	for (auto& p : m_pCharactorList)
+		p->Update(TimeElapsed);
+
+	if(m_pBuildingList.size() < MAX_OBJECTS_COUNT)
+		for (auto& p : m_pBuildingList)
+		{
+			BuildingObject* building = static_cast<BuildingObject*>(p);
+			GameObject* bullet = building->ShootBullet();
+			if (bullet)
+				m_pBulletList.push_back(bullet);
+		}
+	
+	PhysicsProcess(TimeElapsed);
+}
+
+void MainScene::PrepareUpdate(const double TimeElapsed)
+{
+	m_pBuildingList.remove_if(
 		[](const GameObject* pObj)->bool {
 		if (pObj->IsDie()) { delete pObj; return true; }
 		return false; });
+	m_pBulletList.remove_if(
+		[](const GameObject* pObj)->bool {
+		if (pObj->IsDie()) { delete pObj; return true; }
+		return false; });
+	m_pCharactorList.remove_if(
+		[](const GameObject* pObj)->bool {
+		if (pObj->IsDie()) { delete pObj; return true; }
+		return false; });
+}
 
-	for (auto& p : m_pTestObjectsList)
-	{
-		p->Update(TimeElapsed);
-	}
-	for (auto& p : m_pTestObjectsList)
-		for (auto& q : m_pTestObjectsList)
+void MainScene::PhysicsProcess(const double TimeElapsed)
+{
+	for (auto& p : m_pBuildingList)
+		for (auto& q : m_pCharactorList)
 		{
 			if (p == q || (p->IsCollide() && q->IsCollide())) continue;
 			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
 			{
-				p->Collide();
-				q->Collide();
+				p->CollideWith(q);
+				q->CollideWith(p);
+			}
+		}
+	for (auto& p : m_pCharactorList)
+		for (auto& q : m_pBulletList)
+		{
+			if (p == q || (p->IsCollide() && q->IsCollide())) continue;
+			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
+			{
+				p->CollideWith(q);
+				q->CollideWith(p);
 			}
 		}
 }
@@ -69,7 +118,11 @@ void MainScene::Render()
 		m_vec4fBackgroundColor.b,
 		m_vec4fBackgroundColor.a);
 
-	for (auto& p : m_pTestObjectsList)
+	for (auto& p : m_pBuildingList)
+		p->Render(m_pRenderer);
+	for (auto& p : m_pBulletList)
+		p->Render(m_pRenderer);
+	for (auto& p : m_pCharactorList)
 		p->Render(m_pRenderer);
 }
 
@@ -121,19 +174,18 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 	case MOUSE_LEFT_BUTTON:
 		if (state == MOUSE_BUTTON_UP)
 		{
-			if (m_pTestObjectsList.size() < MAX_OBJECTS_COUNT)
+			if (m_pCharactorList.size() < MAX_OBJECTS_COUNT)
 			{
-				for (int i = 0; i < 50; ++i)
+				//for (int i = 0; i < 50; ++i)
 				{
-					GameObject* obj = new BoxObject(
+					GameObject* obj = new CharactorObject(
 						x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
-						10, 1, 0, 1, 1);
+						10, 0, 0, 1, 1, GameObject::ObjectType::OBJECT_CHARACTER);
 					obj->SetDirection(
 						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
 					obj->SetSpeed(100);
-					obj->SetColor(1, 1, 1, 1);
-					m_pTestObjectsList.push_back(obj);
+					m_pCharactorList.push_back(obj);
 				}
 			}
 		}
