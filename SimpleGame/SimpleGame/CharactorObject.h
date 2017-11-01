@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#define DEFAULT_CHARACTOR_MAX_LIFE	25.0f
+#define DEFAULT_CHARACTOR_MAX_LIFE	5.0f
 
 class CharactorObject : public GameObject
 {

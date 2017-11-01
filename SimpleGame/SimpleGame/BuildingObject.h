@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#define DEFAULT_BUILDING_MAX_LIFE	1000.0f
+#define DEFAULT_BUILDING_MAX_LIFE	100.0f
 #define DEFAULT_SHOOT_DELAY			0.5f
 
 class BuildingObject : public GameObject
