@@ -58,7 +58,7 @@ void MainScene::Update(const double TimeElapsed)
 	for (auto& p : m_pCharactorList)
 		p->Update(TimeElapsed);
 
-	if(m_pBuildingList.size() < MAX_OBJECTS_COUNT)
+	if(m_pBulletList.size() < MAX_OBJECTS_COUNT)
 		for (auto& p : m_pBuildingList)
 		{
 			BuildingObject* building = static_cast<BuildingObject*>(p);
