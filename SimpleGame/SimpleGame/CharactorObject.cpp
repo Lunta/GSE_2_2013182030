@@ -27,17 +27,29 @@ CharactorObject::CharactorObject(float x, float y, float z, float size, float r,
 CharactorObject::~CharactorObject()
 {
 	for (auto& p : *m_ArrowList)
-		p->SetLife(0.0f);
+	{
+		auto arrow = dynamic_cast<ArrowObject*>(p);
+		if (arrow)
+		{
+			if (this == arrow->GetLaunchedBy())
+				p->SetLife(0.0f);
+		}
+	}
 }
 
 void CharactorObject::Update(const double TimeElapsed)
 {
 	if (!m_bActive) return;
 	m_vec3fPos += m_vec3fDirection * m_fSpeed * TimeElapsed;
+	m_BindingBox.SetPos(m_vec3fPos);
 	m_fLifeTimer -= TimeElapsed;
 	m_fShootTimer += TimeElapsed;
+	if (m_fShootTimer > DEFAULT_CHARACTOR_SHOOT_DELAY) 
+	{
+		m_fShootTimer = 0.f;
+		ShootBullet();
+	}
 
-	m_BindingBox.SetPos(m_vec3fPos);
 	if (m_bIsCollision)
 	{
 		m_fCollisionTimer += TimeElapsed;
@@ -120,10 +132,9 @@ void CharactorObject::SetArrowList(std::list<GameObject*>* arrow_list)
 	m_ArrowList = arrow_list;
 }
 
-GameObject* CharactorObject::ShootBullet()
+void CharactorObject::ShootBullet()
 {
-	if (m_fShootTimer <= DEFAULT_CHARACTOR_SHOOT_DELAY) return nullptr;
-	m_fShootTimer = 0.f;
+	if (!m_ArrowList) return;
 	ArrowObject* bullet = new ArrowObject(
 		m_vec3fPos
 		, 2.f
@@ -133,6 +144,5 @@ GameObject* CharactorObject::ShootBullet()
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
 	bullet->SetLaunchedBy(this);
-	//m_ArrowList->push_back(bullet);
-	return static_cast<GameObject*>(bullet);
+	m_ArrowList->push_back(bullet);
 }

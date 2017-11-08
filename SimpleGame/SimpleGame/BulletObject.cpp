@@ -84,3 +84,8 @@ void BulletObject::CollideWith(GameObject* other)
 	}
 	}
 }
+
+void BulletObject::SetLaunchedBy(GameObject * other)
+{
+	m_pLaunchedBy = other;
+}

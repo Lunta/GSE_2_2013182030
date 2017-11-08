@@ -59,26 +59,6 @@ void MainScene::Update(const double TimeElapsed)
 		p->Update(TimeElapsed);
 	for (auto& p : m_pCharactorList)
 		p->Update(TimeElapsed);
-
-	if (m_pBulletList.size() < MAX_OBJECTS_COUNT)
-	{
-		GameObject* bullet = nullptr;
-		for (auto& p : m_pBuildingList)
-		{
-			BuildingObject* building = static_cast<BuildingObject*>(p);
-
-			bullet = building->ShootBullet();
-			if (bullet) m_pBulletList.push_back(bullet);
-		}
-		for (auto& p : m_pCharactorList)
-		{
-			CharactorObject* charactor = static_cast<CharactorObject*>(p);
-
-			bullet = charactor->ShootBullet();
-			if (bullet) m_pBulletList.push_back(bullet);
-		}
-	}
-		
 	
 	PhysicsProcess(TimeElapsed);
 }
@@ -208,7 +188,6 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 					obj->SetDirection(
 						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
-					obj->SetSpeed(100);
 					obj->SetArrowList(&m_pBulletList);
 					m_pCharactorList.push_back(obj);
 				}

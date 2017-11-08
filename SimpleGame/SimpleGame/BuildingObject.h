@@ -25,6 +25,6 @@ public:
 	void SetBulletList(std::list<GameObject*>* bullet_list);
 
 	void LoadTexture(Renderer * pRenderer, path texPath);
-	GameObject* ShootBullet();
+	void ShootBullet();
 };
 

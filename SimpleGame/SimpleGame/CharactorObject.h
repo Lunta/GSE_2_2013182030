@@ -24,5 +24,5 @@ public:
 
 	void SetArrowList(std::list<GameObject*>* arrow_list);
 
-	GameObject* ShootBullet();
+	void ShootBullet();
 };

@@ -27,17 +27,29 @@ BuildingObject::BuildingObject(float x, float y, float z, float size, float r, f
 BuildingObject::~BuildingObject()
 {
 	for (auto& p : *m_BulletList)
-		p->SetLife(0.0f);
+	{
+		auto bullet = dynamic_cast<BulletObject*>(p);
+		if (bullet)
+		{
+			if(this == bullet->GetLaunchedBy())
+				p->SetLife(0.0f);
+		}
+	}
 }
 
 void BuildingObject::Update(const double TimeElapsed)
 {
 	if (!m_bActive) return;
 	m_vec3fPos += m_vec3fDirection * m_fSpeed * TimeElapsed;
+	m_BindingBox.SetPos(m_vec3fPos);
 	m_fShootTimer += TimeElapsed;
 	m_fLifeTimer -= TimeElapsed;
+	if (m_fShootTimer > DEFAULT_BUILDING_SHOOT_DELAY)
+	{
+		m_fShootTimer = 0.f;
+		ShootBullet();
+	}
 
-	m_BindingBox.SetPos(m_vec3fPos);
 	if (m_bIsCollision)
 	{
 		m_fCollisionTimer += TimeElapsed;
@@ -117,10 +129,9 @@ void BuildingObject::LoadTexture(Renderer * pRenderer, path texPath)
 	m_texture = pRenderer->CreatePngTexture(&texPath.string()[0]);
 }
 
-GameObject* BuildingObject::ShootBullet()
+void BuildingObject::ShootBullet()
 {
-	if (m_fShootTimer <= DEFAULT_BUILDING_SHOOT_DELAY) return nullptr;
-	m_fShootTimer = 0.f;
+	if (!m_BulletList) return;
 	BulletObject* bullet = new BulletObject(
 		m_vec3fPos
 		, 10.f
@@ -129,6 +140,6 @@ GameObject* BuildingObject::ShootBullet()
 	bullet->SetDirection(
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
-	//m_BulletList.push_back(bullet);
-	return (GameObject*)bullet;
+	bullet->SetLaunchedBy(this);
+	m_BulletList->push_back(bullet);
 }

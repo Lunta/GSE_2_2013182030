@@ -7,6 +7,7 @@
 class BulletObject : public GameObject
 {
 private:
+	GameObject*					m_pLaunchedBy;
 
 public:
 	BulletObject(ObjectType tag);
@@ -18,4 +19,7 @@ public:
 	virtual void Render(Renderer * pRenderer);
 
 	virtual void CollideWith(GameObject* other);
+
+	void SetLaunchedBy(GameObject* other);
+	GameObject* GetLaunchedBy() const { return m_pLaunchedBy; }
 };
