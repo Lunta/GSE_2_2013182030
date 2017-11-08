@@ -10,7 +10,7 @@ private:
 	GameObject* m_pLaunchedBy;
 
 public:
-	ArrowObject(ObjectType tag);
+	ArrowObject(ObjectType tag = ObjectType::OBJECT_ARROW);
 	ArrowObject(const Vec3f& pos, float size, const Vec4f& color, ObjectType tag);
 	ArrowObject(float x, float y, float z, float size, float r, float g, float b, float a, ObjectType tag);
 	virtual ~ArrowObject();

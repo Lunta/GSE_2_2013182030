@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 #define DEFAULT_CHARACTOR_MAX_LIFE		10.0f
-#define DEFAULT_CHARACTOR_SPEED			300.0f
+#define DEFAULT_CHARACTOR_SPEED			100.0f
 #define DEFAULT_CHARACTOR_SHOOT_DELAY	0.5f
 
 class CharactorObject : public GameObject
