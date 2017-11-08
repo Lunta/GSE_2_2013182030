@@ -165,26 +165,30 @@
   <ItemGroup>
     <ClInclude Include="BindingBox.h" />
     <ClInclude Include="BuildingObject.h" />
+    <ClInclude Include="BulletObject.h" />
     <ClInclude Include="CharactorObject.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="LoadPng.h" />
     <ClInclude Include="MainScene.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="BoxObject.h" />
+    <ClInclude Include="ArrowObject.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BindingBox.cpp" />
     <ClCompile Include="BuildingObject.cpp" />
+    <ClCompile Include="BulletObject.cpp" />
     <ClCompile Include="CharactorObject.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="LoadPng.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -195,7 +199,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="BoxObject.cpp" />
+    <ClCompile Include="ArrowObject.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

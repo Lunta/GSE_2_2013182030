@@ -11,6 +11,9 @@
 #include <vector>
 #include <list>
 
+#include <filesystem>
+using namespace std::experimental::filesystem;
+
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 
@@ -19,9 +22,9 @@
 #define CLIENT_TITLE "Game Software Engineering KPU"
 
 #ifdef _DEBUG
-#define MAX_FPS 1.0 / 144.0
+#define MAX_FPS 1.0 / 500
 #else
-#define MAX_FPS 1.0 / 60.0
+#define MAX_FPS 1.0 / 144.0
 #endif
 
 #define KEY_TAB			9

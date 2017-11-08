@@ -1,24 +1,33 @@
 #include "stdafx.h"
 #include "CharactorObject.h"
 #include "Renderer.h"
+#include "ArrowObject.h"
 
 CharactorObject::CharactorObject(ObjectType tag)
 	: GameObject(tag)
+	, m_fShootTimer(0.f)
 {
 	m_fLife = DEFAULT_CHARACTOR_MAX_LIFE;
+	m_fSpeed = DEFAULT_CHARACTOR_SPEED;
 }
 CharactorObject::CharactorObject(const Vec3f& pos, float size, const Vec4f& color, ObjectType tag)
 	: GameObject(pos, size, color, tag)
+	, m_fShootTimer(0.f)
 {
 	m_fLife = DEFAULT_CHARACTOR_MAX_LIFE;
+	m_fSpeed = DEFAULT_CHARACTOR_SPEED;
 }
 CharactorObject::CharactorObject(float x, float y, float z, float size, float r, float g, float b, float a, ObjectType tag)
 	: GameObject(x, y, z, size, r, g, b, a, tag)
+	, m_fShootTimer(0.f)
 {
 	m_fLife = DEFAULT_CHARACTOR_MAX_LIFE;
+	m_fSpeed = DEFAULT_CHARACTOR_SPEED;
 }
 CharactorObject::~CharactorObject()
 {
+	for (auto& p : *m_ArrowList)
+		p->SetLife(0.0f);
 }
 
 void CharactorObject::Update(const double TimeElapsed)
@@ -26,6 +35,7 @@ void CharactorObject::Update(const double TimeElapsed)
 	if (!m_bActive) return;
 	m_vec3fPos += m_vec3fDirection * m_fSpeed * TimeElapsed;
 	m_fLifeTimer -= TimeElapsed;
+	m_fShootTimer += TimeElapsed;
 
 	m_BindingBox.SetPos(m_vec3fPos);
 	if (m_bIsCollision)
@@ -56,7 +66,7 @@ void CharactorObject::Render(Renderer * pRenderer)
 		m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a);
 }
 
-void CharactorObject::CollideWith(GameObject * other)
+void CharactorObject::CollideWith(GameObject* other)
 {
 	if (!m_bActive) return;
 	switch (other->GetTag())
@@ -86,5 +96,43 @@ void CharactorObject::CollideWith(GameObject * other)
 		}
 		break;
 	}
+	case GameObject::ObjectType::OBJECT_ARROW:
+	{
+		if (this == dynamic_cast<ArrowObject*>(other)->GetLaunchedBy()) return;
+		if (m_bIsCollision) break;
+		m_bIsCollision = true;
+		m_fCollisionTimer = 0.0f;
+		m_pTarget = other;
+		m_fLife -= other->GetLife();
+		m_vec4fColor -= Vec4f{ 0.1f, 0.1f, 0.1f, 0.0f };
+		if (m_fLife <= 0.0f)
+		{
+			m_fLife = 0.0f;
+			m_bActive = false;
+		}
+		break;
 	}
+	}
+}
+
+void CharactorObject::SetArrowList(std::list<GameObject*>* arrow_list)
+{
+	m_ArrowList = arrow_list;
+}
+
+GameObject* CharactorObject::ShootBullet()
+{
+	if (m_fShootTimer <= DEFAULT_CHARACTOR_SHOOT_DELAY) return nullptr;
+	m_fShootTimer = 0.f;
+	ArrowObject* bullet = new ArrowObject(
+		m_vec3fPos
+		, 2.f
+		, Vec4f{ 0, 0, 0, 1 }
+	, GameObject::ObjectType::OBJECT_ARROW);
+	bullet->SetDirection(
+		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
+		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
+	bullet->SetLaunchedBy(this);
+	//m_ArrowList->push_back(bullet);
+	return static_cast<GameObject*>(bullet);
 }

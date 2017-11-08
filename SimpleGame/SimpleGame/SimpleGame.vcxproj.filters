@@ -37,9 +37,6 @@
     <Filter Include="GameObject">
       <UniqueIdentifier>{3bc045fc-3334-4fd5-bbb1-0143244f5466}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject\BoxObject">
-      <UniqueIdentifier>{391497e0-501a-47db-9b4e-675485c88fd4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameObject\BindingBox">
       <UniqueIdentifier>{ba37c289-8266-46d4-9950-fa5a8534ea14}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,15 @@
     </Filter>
     <Filter Include="GameObject\CharactorObject">
       <UniqueIdentifier>{8cad1e5d-0ced-424b-a2dd-a32472bab78e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LoadPng">
+      <UniqueIdentifier>{25512a72-4b65-4e23-a1aa-e78b0dd51220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\ArrowObject">
+      <UniqueIdentifier>{391497e0-501a-47db-9b4e-675485c88fd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\BulletObject">
+      <UniqueIdentifier>{07acbecb-40c9-402c-974e-e1f11876729f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,9 +75,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>Scene\Title</Filter>
     </ClInclude>
@@ -87,14 +90,23 @@
     <ClInclude Include="BindingBox.h">
       <Filter>GameObject\BindingBox</Filter>
     </ClInclude>
-    <ClInclude Include="BoxObject.h">
-      <Filter>GameObject\BoxObject</Filter>
-    </ClInclude>
     <ClInclude Include="BuildingObject.h">
       <Filter>GameObject\BuildingObject</Filter>
     </ClInclude>
     <ClInclude Include="CharactorObject.h">
       <Filter>GameObject\CharactorObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadPng.h">
+      <Filter>LoadPng</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowObject.h">
+      <Filter>GameObject\ArrowObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletObject.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +125,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>Scene\Title</Filter>
     </ClCompile>
@@ -128,14 +137,23 @@
     <ClCompile Include="BindingBox.cpp">
       <Filter>GameObject\BindingBox</Filter>
     </ClCompile>
-    <ClCompile Include="BoxObject.cpp">
-      <Filter>GameObject\BoxObject</Filter>
-    </ClCompile>
     <ClCompile Include="BuildingObject.cpp">
       <Filter>GameObject\BuildingObject</Filter>
     </ClCompile>
     <ClCompile Include="CharactorObject.cpp">
       <Filter>GameObject\CharactorObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadPng.cpp">
+      <Filter>LoadPng</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrowObject.cpp">
+      <Filter>GameObject\ArrowObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletObject.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TitleScene.h"
 #include "Framework.h"
-#include "BoxObject.h"
+#include "ArrowObject.h"
 
 TitleScene::TitleScene(const Type& tag) : Scene(tag)
 {
@@ -14,7 +14,7 @@ void TitleScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
-	m_pTestObject = new BoxObject(0, 0, 0, 4, 1, 0, 1, 1, GameObject::ObjectType::OBJECT_BULLET);
+	m_pTestObject = new ArrowObject(0, 0, 0, 4, 1, 0, 1, 1, GameObject::ObjectType::OBJECT_BULLET);
 }
 
 void TitleScene::ReleaseObjects()

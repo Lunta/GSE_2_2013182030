@@ -1,13 +1,15 @@
 #pragma once
 #include "GameObject.h"
 
-#define DEFAULT_BUILDING_MAX_LIFE	100.0f
-#define DEFAULT_SHOOT_DELAY			0.5f
+#define DEFAULT_BUILDING_MAX_LIFE		500.0f
+#define DEFAULT_BUILDING_SHOOT_DELAY	0.5f
 
 class BuildingObject : public GameObject
 {
 private:
-	float				m_fShootTimer;
+	float						m_fShootTimer;
+	unsigned int				m_texture;
+	std::list<GameObject*>		*m_BulletList;
 
 public:
 	BuildingObject(ObjectType tag = ObjectType::OBJECT_BUILDING);
@@ -20,6 +22,9 @@ public:
 
 	virtual void CollideWith(GameObject* other);
 
+	void SetBulletList(std::list<GameObject*>* bullet_list);
+
+	void LoadTexture(Renderer * pRenderer, path texPath);
 	GameObject* ShootBullet();
 };
 

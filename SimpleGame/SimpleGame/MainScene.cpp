@@ -17,19 +17,21 @@ void MainScene::BuildObjects()
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
 
-	GameObject* obj = new BuildingObject(
+	BuildingObject* obj = new BuildingObject(
 		0, 0, 0, 50, 1, 1, 0, 1, GameObject::ObjectType::OBJECT_BUILDING);
+	obj->LoadTexture(m_pRenderer, "./Assets/Buckler.png");
+	obj->SetBulletList(&m_pBulletList);
 	m_pBuildingList.push_back(obj);
 	while(m_pCharactorList.size() < MAX_OBJECTS_COUNT / 2)
 	{
-		GameObject* obj = new CharactorObject(
+		CharactorObject* obj = new CharactorObject(
 			  (1 - 2 * (rand() % 2))*(rand() % CLIENT_WIDTH / 2.0)
 			, (1 - 2 * (rand() % 2))*(rand() % CLIENT_HEIGHT / 2.0)
 			, 0, 10, 0, 0, 1, 1, GameObject::ObjectType::OBJECT_CHARACTER);
 		obj->SetDirection(
 			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
-		obj->SetSpeed(100);
+		obj->SetArrowList(&m_pBulletList);
 		m_pCharactorList.push_back(obj);
 	}
 }
@@ -58,14 +60,25 @@ void MainScene::Update(const double TimeElapsed)
 	for (auto& p : m_pCharactorList)
 		p->Update(TimeElapsed);
 
-	if(m_pBulletList.size() < MAX_OBJECTS_COUNT)
+	if (m_pBulletList.size() < MAX_OBJECTS_COUNT)
+	{
+		GameObject* bullet = nullptr;
 		for (auto& p : m_pBuildingList)
 		{
 			BuildingObject* building = static_cast<BuildingObject*>(p);
-			GameObject* bullet = building->ShootBullet();
-			if (bullet)
-				m_pBulletList.push_back(bullet);
+
+			bullet = building->ShootBullet();
+			if (bullet) m_pBulletList.push_back(bullet);
 		}
+		for (auto& p : m_pCharactorList)
+		{
+			CharactorObject* charactor = static_cast<CharactorObject*>(p);
+
+			bullet = charactor->ShootBullet();
+			if (bullet) m_pBulletList.push_back(bullet);
+		}
+	}
+		
 	
 	PhysicsProcess(TimeElapsed);
 }
@@ -98,8 +111,9 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 				q->CollideWith(p);
 			}
 		}
-	for (auto& p : m_pCharactorList)
-		for (auto& q : m_pBulletList)
+	for (auto& q : m_pBulletList)
+	{
+		for (auto& p : m_pCharactorList)
 		{
 			if (p == q || (p->IsCollide() && q->IsCollide())) continue;
 			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
@@ -108,6 +122,16 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 				q->CollideWith(p);
 			}
 		}
+		for (auto& p : m_pBuildingList)
+		{
+			if (p == q || (p->IsCollide() && q->IsCollide())) continue;
+			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
+			{
+				p->CollideWith(q);
+				q->CollideWith(p);
+			}
+		}
+	}
 }
 
 void MainScene::Render()
@@ -178,13 +202,14 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 			{
 				//for (int i = 0; i < 50; ++i)
 				{
-					GameObject* obj = new CharactorObject(
+					CharactorObject* obj = new CharactorObject(
 						x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
 						10, 0, 0, 1, 1, GameObject::ObjectType::OBJECT_CHARACTER);
 					obj->SetDirection(
 						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
 					obj->SetSpeed(100);
+					obj->SetArrowList(&m_pBulletList);
 					m_pCharactorList.push_back(obj);
 				}
 			}

@@ -2,16 +2,16 @@
 #include "Scene.h"
 #include "GameObject.h"
 
-#define MAX_OBJECTS_COUNT 50
+#define MAX_OBJECTS_COUNT 100
 
 class GameObject;
 
 class MainScene final : public Scene
 {
 private:
-	std::list<GameObject*> m_pCharactorList;
-	std::list<GameObject*> m_pBuildingList;
-	std::list<GameObject*> m_pBulletList;
+	std::list<GameObject*>		m_pCharactorList;
+	std::list<GameObject*>		m_pBuildingList;
+	std::list<GameObject*>		m_pBulletList;
 
 public:
 	MainScene(const Type& tag);
