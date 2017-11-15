@@ -2,7 +2,9 @@
 #include "Scene.h"
 #include "GameObject.h"
 
-#define MAX_OBJECTS_COUNT 100
+#define MAX_OBJECTS_COUNT				100
+#define TEAM_1_CHARACTOR_RESPAWN_DELAY	1.0f
+#define TEAM_2_CHARACTOR_RESPAWN_DELAY	2.0f
 
 class GameObject;
 
@@ -12,6 +14,9 @@ private:
 	std::list<GameObject*>		m_pCharactorList;
 	std::list<GameObject*>		m_pBuildingList;
 	std::list<GameObject*>		m_pBulletList;
+
+	float						m_fTeam1_SpawnTimer;
+	float						m_fTeam2_SpawnTimer;
 
 public:
 	MainScene(const Type& tag);
@@ -28,4 +33,7 @@ public:
 	virtual void Input_Key(unsigned char key, int x, int y) override;
 	virtual void Input_SpecialKey(int key, int x, int y) override;
 	virtual void Input_MouseButton(int button, int state, int x, int y) override;
+
+	void RandomSpawnCharactor(GameObject::ObjectTeam team);
+	void SpawnCharactor(const Vec3f& pos);
 };

@@ -17,9 +17,9 @@ using namespace std::experimental::filesystem;
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 
-#define CLIENT_WIDTH 500
-#define CLIENT_HEIGHT 500
-#define CLIENT_TITLE "Game Software Engineering KPU"
+#define CLIENT_WIDTH	500
+#define CLIENT_HEIGHT	800
+#define CLIENT_TITLE	"Game Software Engineering KPU"
 
 #ifdef _DEBUG
 #define MAX_FPS 1.0 / 500

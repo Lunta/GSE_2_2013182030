@@ -14,7 +14,12 @@ void TitleScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
-	m_pTestObject = new ArrowObject(0, 0, 0, 4, 1, 0, 1, 1, GameObject::ObjectType::OBJECT_BULLET);
+	m_pTestObject = new ArrowObject(
+		Vec3f()
+		, DEFAULT_ARROW_SIZE
+		, ARROW_TEAM_1_COLOR
+		, GameObject::ObjectTeam::OBJECT_TEAM_1
+		, GameObject::ObjectType::OBJECT_ARROW);
 }
 
 void TitleScene::ReleaseObjects()

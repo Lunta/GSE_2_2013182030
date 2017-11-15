@@ -4,7 +4,10 @@
 #include "CharactorObject.h"
 #include "BuildingObject.h"
 
-MainScene::MainScene(const Type& tag) : Scene(tag)
+MainScene::MainScene(const Type& tag) 
+	: Scene(tag)
+	, m_fTeam1_SpawnTimer(0)
+	, m_fTeam2_SpawnTimer(0)
 {
 }
 MainScene::~MainScene()
@@ -16,24 +19,37 @@ void MainScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
-
-	BuildingObject* obj = new BuildingObject(
-		0, 0, 0, 50, 1, 1, 0, 1, GameObject::ObjectType::OBJECT_BUILDING);
-	obj->LoadTexture(m_pRenderer, "./Assets/Buckler.png");
-	obj->SetBulletList(&m_pBulletList);
-	m_pBuildingList.push_back(obj);
-	while(m_pCharactorList.size() < MAX_OBJECTS_COUNT / 2)
+	
+	float building_stride_width = (float)CLIENT_WIDTH * 0.25f;
+	float building_pos_y = (float)CLIENT_HEIGHT * 0.4f;
+	for (int i = -1; i < 2; ++i)
 	{
-		CharactorObject* obj = new CharactorObject(
-			  (1 - 2 * (rand() % 2))*(rand() % CLIENT_WIDTH / 2.0)
-			, (1 - 2 * (rand() % 2))*(rand() % CLIENT_HEIGHT / 2.0)
-			, 0, 10, 0, 0, 1, 1, GameObject::ObjectType::OBJECT_CHARACTER);
-		obj->SetDirection(
-			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
-			(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
-		obj->SetArrowList(&m_pBulletList);
-		m_pCharactorList.push_back(obj);
+		BuildingObject* obj = new BuildingObject(Vec3f(
+			  building_stride_width * i
+			, building_pos_y
+			, 0)
+			, DEFAULT_BUILDING_SIZE
+			, Vec4f()
+			, GameObject::ObjectTeam::OBJECT_TEAM_1
+			, GameObject::ObjectType::OBJECT_BUILDING);
+		obj->LoadTexture(m_pRenderer, BUILDING_TEAM_1_TEXTURE_PATH);
+		obj->SetBulletList(&m_pBulletList);
+		m_pBuildingList.push_back(obj);
+
+		obj = new BuildingObject(Vec3f(
+			building_stride_width * i
+			, -building_pos_y
+			, 0)
+			, DEFAULT_BUILDING_SIZE
+			, Vec4f()
+			, GameObject::ObjectTeam::OBJECT_TEAM_2
+			, GameObject::ObjectType::OBJECT_BUILDING);
+		obj->LoadTexture(m_pRenderer, BUILDING_TEAM_2_TEXTURE_PATH);
+		obj->SetBulletList(&m_pBulletList);
+		m_pBuildingList.push_back(obj);
 	}
+	
+	
 }
 
 void MainScene::ReleaseObjects()
@@ -77,6 +93,14 @@ void MainScene::PrepareUpdate(const double TimeElapsed)
 		[](const GameObject* pObj)->bool {
 		if (pObj->IsDie()) { delete pObj; return true; }
 		return false; });
+
+	m_fTeam1_SpawnTimer += TimeElapsed;
+	if (m_fTeam1_SpawnTimer > TEAM_1_CHARACTOR_RESPAWN_DELAY)
+	{
+		RandomSpawnCharactor(GameObject::ObjectTeam::OBJECT_TEAM_1);
+		m_fTeam1_SpawnTimer = 0.f;
+	}
+	m_fTeam2_SpawnTimer += TimeElapsed;
 }
 
 void MainScene::PhysicsProcess(const double TimeElapsed)
@@ -84,6 +108,7 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 	for (auto& p : m_pBuildingList)
 		for (auto& q : m_pCharactorList)
 		{
+			if (p->GetTeamTag() == q->GetTeamTag()) continue;
 			if (p == q || (p->IsCollide() && q->IsCollide())) continue;
 			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
 			{
@@ -95,6 +120,7 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 	{
 		for (auto& p : m_pCharactorList)
 		{
+			if (p->GetTeamTag() == q->GetTeamTag()) continue;
 			if (p == q || (p->IsCollide() && q->IsCollide())) continue;
 			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
 			{
@@ -104,6 +130,7 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 		}
 		for (auto& p : m_pBuildingList)
 		{
+			if (p->GetTeamTag() == q->GetTeamTag()) continue;
 			if (p == q || (p->IsCollide() && q->IsCollide())) continue;
 			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
 			{
@@ -178,19 +205,11 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 	case MOUSE_LEFT_BUTTON:
 		if (state == MOUSE_BUTTON_UP)
 		{
-			if (m_pCharactorList.size() < MAX_OBJECTS_COUNT)
+			if (m_fTeam2_SpawnTimer > TEAM_2_CHARACTOR_RESPAWN_DELAY)
 			{
-				//for (int i = 0; i < 50; ++i)
-				{
-					CharactorObject* obj = new CharactorObject(
-						x - CLIENT_WIDTH / 2, CLIENT_HEIGHT / 2 - y, 0,
-						10, 0, 0, 1, 1, GameObject::ObjectType::OBJECT_CHARACTER);
-					obj->SetDirection(
-						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
-						(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
-					obj->SetArrowList(&m_pBulletList);
-					m_pCharactorList.push_back(obj);
-				}
+				SpawnCharactor(Vec3f(x - CLIENT_WIDTH / 2
+					, CLIENT_HEIGHT / 2 - y, 0));
+				m_fTeam2_SpawnTimer = 0.f;
 			}
 		}
 		break;
@@ -204,5 +223,85 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 		break;
 	default:
 		break;
+	}
+}
+
+void MainScene::RandomSpawnCharactor(GameObject::ObjectTeam team)
+{
+	if (m_pCharactorList.size() < MAX_OBJECTS_COUNT)
+	{
+		switch (team)
+		{
+		case GameObject::ObjectTeam::OBJECT_TEAM_1: 
+		{
+			CharactorObject* obj = new CharactorObject(Vec3f(
+				(rand() % CLIENT_WIDTH) - (CLIENT_WIDTH / 2)
+				, rand() % (CLIENT_HEIGHT / 2)
+				, 0)
+				, DEFAULT_CHARACTOR_SIZE
+				, CHARACTOR_TEAM_1_COLOR
+				, GameObject::ObjectTeam::OBJECT_TEAM_1
+				, GameObject::ObjectType::OBJECT_CHARACTER);
+			obj->SetDirection(
+				(rand() % 2000) - (rand() / 1000),
+				(rand() % 2000) - (rand() / 1000));
+			obj->SetArrowList(&m_pBulletList);
+			m_pCharactorList.push_back(obj);
+			break;
+		}
+		case GameObject::ObjectTeam::OBJECT_TEAM_2:	
+		{
+			CharactorObject* obj = new CharactorObject(Vec3f(
+				(rand() % CLIENT_WIDTH) - (CLIENT_WIDTH / 2)
+				, -rand() % (CLIENT_HEIGHT / 2)
+				, 0)
+				, DEFAULT_CHARACTOR_SIZE
+				, CHARACTOR_TEAM_2_COLOR
+				, GameObject::ObjectTeam::OBJECT_TEAM_2
+				, GameObject::ObjectType::OBJECT_CHARACTER);
+			obj->SetDirection(
+				(rand() % 2000) - (rand() / 1000),
+				(rand() % 2000) - (rand() / 1000));
+			obj->SetArrowList(&m_pBulletList);
+			m_pCharactorList.push_back(obj);
+			break;
+		}
+		}
+		
+	}
+}
+
+void MainScene::SpawnCharactor(const Vec3f & pos)
+{
+	if (m_pCharactorList.size() < MAX_OBJECTS_COUNT)
+	{
+		if (pos.y > 0)
+		{
+			//CharactorObject* obj = new CharactorObject(
+			//	  pos
+			//	, DEFAULT_CHARACTOR_SIZE
+			//	, CHARACTOR_TEAM_1_COLOR
+			//	, GameObject::ObjectTeam::OBJECT_TEAM_1
+			//	, GameObject::ObjectType::OBJECT_CHARACTER);
+			//obj->SetDirection(
+			//	(rand() % 2000) - (rand() / 1000),
+			//	(rand() % 2000) - (rand() / 1000));
+			//obj->SetArrowList(&m_pBulletList);
+			//m_pCharactorList.push_back(obj);
+		}
+		else if (pos.y < 0)
+		{
+			CharactorObject* obj = new CharactorObject(
+				  pos
+				, DEFAULT_CHARACTOR_SIZE
+				, CHARACTOR_TEAM_2_COLOR
+				, GameObject::ObjectTeam::OBJECT_TEAM_2
+				, GameObject::ObjectType::OBJECT_CHARACTER);
+			obj->SetDirection(
+				(rand() % 2000) - (rand() / 1000),
+				(rand() % 2000) - (rand() / 1000));
+			obj->SetArrowList(&m_pBulletList);
+			m_pCharactorList.push_back(obj);
+		}
 	}
 }

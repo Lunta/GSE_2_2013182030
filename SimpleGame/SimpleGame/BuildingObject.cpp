@@ -3,22 +3,31 @@
 #include "Renderer.h"
 #include "BulletObject.h"
 
-BuildingObject::BuildingObject(ObjectType tag)
-	: GameObject(tag)
+BuildingObject::BuildingObject(ObjectTeam team, ObjectType tag)
+	: GameObject(team, tag)
 	, m_fShootTimer(0.f)
 	, m_texture(0)
 {
 	m_fLife = DEFAULT_BUILDING_MAX_LIFE;
 }
-BuildingObject::BuildingObject(const Vec3f& pos, float size, const Vec4f& color, ObjectType tag)
-	: GameObject(pos, size, color, tag)
+BuildingObject::BuildingObject(
+	const Vec3f& pos
+	, float size
+	, const Vec4f& color
+	, ObjectTeam team
+	, ObjectType tag)
+	: GameObject(pos, size, color, team, tag)
 	, m_fShootTimer(0.f)
 	, m_texture(0)
 {
 	m_fLife = DEFAULT_BUILDING_MAX_LIFE;
 }
-BuildingObject::BuildingObject(float x, float y, float z, float size, float r, float g, float b, float a, ObjectType tag)
-	: GameObject(x, y, z, size, r, g, b, a, tag)
+BuildingObject::BuildingObject(
+	float x, float y, float z, float size
+	, float r, float g, float b, float a
+	, ObjectTeam team
+	, ObjectType tag)
+	: GameObject(x, y, z, size, r, g, b, a, team, tag)
 	, m_fShootTimer(0.f)
 	, m_texture(0)
 {
@@ -132,11 +141,26 @@ void BuildingObject::LoadTexture(Renderer * pRenderer, path texPath)
 void BuildingObject::ShootBullet()
 {
 	if (!m_BulletList) return;
-	BulletObject* bullet = new BulletObject(
-		m_vec3fPos
-		, 10.f
-		, Vec4f{ 0, 0, 0, 1 }
-		, GameObject::ObjectType::OBJECT_BULLET);
+	BulletObject* bullet = nullptr;
+	switch (m_TeamTag)
+	{
+	case ObjectTeam::OBJECT_TEAM_1:
+		bullet = new BulletObject(
+			  m_vec3fPos
+			, DEFAULT_BULLET_SIZE
+			, BULLET_TEAM_1_COLOR
+			, m_TeamTag
+			, ObjectType::OBJECT_BULLET);
+		break;
+	case ObjectTeam::OBJECT_TEAM_2:
+		bullet = new BulletObject(
+			  m_vec3fPos
+			, DEFAULT_BULLET_SIZE
+			, BULLET_TEAM_2_COLOR
+			, m_TeamTag
+			, ObjectType::OBJECT_BULLET);
+		break;
+	}
 	bullet->SetDirection(
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));

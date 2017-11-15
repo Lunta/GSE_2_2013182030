@@ -3,8 +3,9 @@
 #include "Renderer.h"
 
 
-GameObject::GameObject(ObjectType tag)
-	: m_Tag(tag)
+GameObject::GameObject(ObjectTeam team, ObjectType tag)
+	: m_TypeTag(tag)
+	, m_TeamTag(team)
 	, m_bActive(true)
 	, m_vec3fPos({ 0, 0, 0 })
 	, m_vec4fColor({ 0, 0, 0, 1 })
@@ -19,8 +20,14 @@ GameObject::GameObject(ObjectType tag)
 	, m_fLifeTimer(DEFAULT_LIFE_TIME)
 {
 }
-GameObject::GameObject(const Vec3f& pos, float size, const Vec4f& color, ObjectType tag)
-	: m_Tag(tag)
+GameObject::GameObject(
+	const Vec3f& pos
+	, float size
+	, const Vec4f& color
+	, ObjectTeam team
+	, ObjectType tag)
+	: m_TypeTag(tag)
+	, m_TeamTag(team)
 	, m_bActive(true)
 	, m_vec3fPos(pos)
 	, m_vec4fColor(color)
@@ -35,8 +42,13 @@ GameObject::GameObject(const Vec3f& pos, float size, const Vec4f& color, ObjectT
 	, m_fLifeTimer(DEFAULT_LIFE_TIME)
 {
 }
-GameObject::GameObject(float x, float y, float z, float size, float r, float g, float b, float a, ObjectType tag)
-	: m_Tag(tag)
+GameObject::GameObject(
+	float x, float y, float z, float size
+	, float r, float g, float b, float a
+	, ObjectTeam team
+	, ObjectType tag)
+	: m_TypeTag(tag)
+	, m_TeamTag(team)
 	, m_bActive(true)
 	, m_vec3fPos({ x, y, z })
 	, m_vec4fColor({ r, g, b, a })

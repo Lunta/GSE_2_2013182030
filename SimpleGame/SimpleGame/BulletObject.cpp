@@ -3,8 +3,8 @@
 
 #include "Renderer.h"
 
-BulletObject::BulletObject(ObjectType tag)
-	: GameObject(tag)
+BulletObject::BulletObject(ObjectTeam team, ObjectType tag)
+	: GameObject(team, tag)
 {
 	m_fLife = DEFAULT_BULLET_MAX_LIFE;
 	m_fSpeed = DEFAULT_BULLET_SPEED;
@@ -13,8 +13,9 @@ BulletObject::BulletObject(
 	const Vec3f & pos
 	, float size
 	, const Vec4f & color
+	, ObjectTeam team
 	, ObjectType tag)
-	: GameObject(pos, size, color, tag)
+	: GameObject(pos, size, color, team, tag)
 {
 	m_fLife = DEFAULT_BULLET_MAX_LIFE;
 	m_fSpeed = DEFAULT_BULLET_SPEED;
@@ -23,8 +24,9 @@ BulletObject::BulletObject(
 	float x, float y, float z
 	, float size
 	, float r, float g, float b, float a
+	, ObjectTeam team
 	, ObjectType tag)
-	: GameObject(x, y, z, size, r, g, b, a, tag)
+	: GameObject(x, y, z, size, r, g, b, a, team, tag)
 {
 	m_fLife = DEFAULT_BULLET_MAX_LIFE;
 	m_fSpeed = DEFAULT_BULLET_SPEED;

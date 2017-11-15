@@ -2,8 +2,8 @@
 #include "ArrowObject.h"
 #include "Renderer.h"
 
-ArrowObject::ArrowObject(ObjectType tag)
-	: GameObject(tag)
+ArrowObject::ArrowObject(ObjectTeam team, ObjectType tag)
+	: GameObject(team, tag)
 	, m_pLaunchedBy(nullptr)
 {
 	m_fLife = DEFAULT_ARROW_MAX_LIFE;
@@ -13,8 +13,9 @@ ArrowObject::ArrowObject(
 	  const Vec3f & pos
 	, float size
 	, const Vec4f & color
+	, ObjectTeam team
 	, ObjectType tag)
-	: GameObject(pos, size, color, tag)
+	: GameObject(pos, size, color, team, tag)
 	, m_pLaunchedBy(nullptr)
 {
 	m_fLife = DEFAULT_ARROW_MAX_LIFE;
@@ -24,8 +25,9 @@ ArrowObject::ArrowObject(
 	  float x, float y, float z
 	, float size
 	, float r, float g, float b, float a
+	, ObjectTeam team
 	, ObjectType tag)
-	: GameObject(x, y, z, size, r, g, b, a, tag)
+	: GameObject(x, y, z, size, r, g, b, a, team, tag)
 	, m_pLaunchedBy(nullptr)
 {
 	m_fLife = DEFAULT_ARROW_MAX_LIFE;

@@ -11,14 +11,20 @@ class GameObject
 {
 public:
 	enum class ObjectType {
-		OBJECT_BUILDING = 0
+		  OBJECT_BUILDING = 0
 		, OBJECT_CHARACTER
 		, OBJECT_BULLET
 		, OBJECT_ARROW
 	};
 
+	enum class ObjectTeam {
+		  OBJECT_TEAM_1 = 0
+		, OBJECT_TEAM_2
+	};
+
 protected:
-	ObjectType			m_Tag;
+	ObjectTeam			m_TeamTag;
+	ObjectType			m_TypeTag;
 	bool				m_bActive;
 
 	Vec3f				m_vec3fPos;
@@ -37,9 +43,18 @@ protected:
 	float				m_fCollisionTimer;
 
 public:
-	GameObject(ObjectType tag);
-	GameObject(const Vec3f& pos, float size, const Vec4f& color, ObjectType tag);
-	GameObject(float x, float y, float z, float size, float r, float g, float b, float a, ObjectType tag);
+	GameObject(ObjectTeam team, ObjectType tag);
+	GameObject(
+		  const Vec3f& pos
+		, float size
+		, const Vec4f& color
+		, ObjectTeam team
+		, ObjectType tag);
+	GameObject(
+		  float x, float y, float z, float size
+		, float r, float g, float b, float a
+		, ObjectTeam team
+		, ObjectType tag);
 	virtual ~GameObject();
 
 	virtual void Update(const double TimeElapsed) = 0;
@@ -63,7 +78,8 @@ public:
 	void SetLife(float life);
 	void SetLifeTime(float life_time);
 
-	const ObjectType&	GetTag()		const { return m_Tag; }
+	const ObjectTeam&	GetTeamTag()	const { return m_TeamTag; }
+	const ObjectType&	GetTag()		const { return m_TypeTag; }
 	const Vec3f&		GetPos()		const { return m_vec3fPos; }
 	float				GetSize()		const { return m_fSize; }
 	float				GetLife()		const { return m_fLife; }

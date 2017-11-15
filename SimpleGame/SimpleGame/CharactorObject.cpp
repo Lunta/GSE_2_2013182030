@@ -3,22 +3,31 @@
 #include "Renderer.h"
 #include "ArrowObject.h"
 
-CharactorObject::CharactorObject(ObjectType tag)
-	: GameObject(tag)
+CharactorObject::CharactorObject(ObjectTeam team, ObjectType tag)
+	: GameObject(team, tag)
 	, m_fShootTimer(0.f)
 {
 	m_fLife = DEFAULT_CHARACTOR_MAX_LIFE;
 	m_fSpeed = DEFAULT_CHARACTOR_SPEED;
 }
-CharactorObject::CharactorObject(const Vec3f& pos, float size, const Vec4f& color, ObjectType tag)
-	: GameObject(pos, size, color, tag)
+CharactorObject::CharactorObject(
+	const Vec3f& pos
+	, float size
+	, const Vec4f& color
+	, ObjectTeam team
+	, ObjectType tag)
+	: GameObject(pos, size, color, team, tag)
 	, m_fShootTimer(0.f)
 {
 	m_fLife = DEFAULT_CHARACTOR_MAX_LIFE;
 	m_fSpeed = DEFAULT_CHARACTOR_SPEED;
 }
-CharactorObject::CharactorObject(float x, float y, float z, float size, float r, float g, float b, float a, ObjectType tag)
-	: GameObject(x, y, z, size, r, g, b, a, tag)
+CharactorObject::CharactorObject(
+	float x, float y, float z, float size
+	, float r, float g, float b, float a
+	, ObjectTeam team
+	, ObjectType tag)
+	: GameObject(x, y, z, size, r, g, b, a, team, tag)
 	, m_fShootTimer(0.f)
 {
 	m_fLife = DEFAULT_CHARACTOR_MAX_LIFE;
@@ -135,11 +144,26 @@ void CharactorObject::SetArrowList(std::list<GameObject*>* arrow_list)
 void CharactorObject::ShootBullet()
 {
 	if (!m_ArrowList) return;
-	ArrowObject* bullet = new ArrowObject(
-		m_vec3fPos
-		, 2.f
-		, Vec4f{ 0, 0, 0, 1 }
-	, GameObject::ObjectType::OBJECT_ARROW);
+	ArrowObject* bullet = nullptr;
+	switch (m_TeamTag)
+	{
+	case ObjectTeam::OBJECT_TEAM_1:
+		bullet = new ArrowObject(
+			m_vec3fPos
+			, DEFAULT_ARROW_SIZE
+			, ARROW_TEAM_1_COLOR
+			, m_TeamTag
+			, ObjectType::OBJECT_ARROW);
+		break;
+	case ObjectTeam::OBJECT_TEAM_2:
+		bullet = new ArrowObject(
+			m_vec3fPos
+			, DEFAULT_ARROW_SIZE
+			, ARROW_TEAM_1_COLOR
+			, m_TeamTag
+			, ObjectType::OBJECT_ARROW);
+		break;
+	}
 	bullet->SetDirection(
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
