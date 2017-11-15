@@ -205,10 +205,11 @@ void MainScene::Input_MouseButton(int button, int state, int x, int y)
 	case MOUSE_LEFT_BUTTON:
 		if (state == MOUSE_BUTTON_UP)
 		{
+			float PosY = CLIENT_HEIGHT / 2 - y;
+			if (PosY > 0) break;
 			if (m_fTeam2_SpawnTimer > TEAM_2_CHARACTOR_RESPAWN_DELAY)
 			{
-				SpawnCharactor(Vec3f(x - CLIENT_WIDTH / 2
-					, CLIENT_HEIGHT / 2 - y, 0));
+				SpawnCharactor(Vec3f(x - CLIENT_WIDTH / 2, PosY, 0));
 				m_fTeam2_SpawnTimer = 0.f;
 			}
 		}
