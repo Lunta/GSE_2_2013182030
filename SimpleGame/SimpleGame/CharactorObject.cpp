@@ -83,8 +83,31 @@ void CharactorObject::Render(Renderer * pRenderer)
 {
 	if (!m_bActive) return;
 	pRenderer->DrawSolidRect(
-		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize,
-		m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a);
+		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize
+		, m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a
+		, LEVEL_UNIT);
+
+	switch (m_TeamTag)
+	{
+	case ObjectTeam::OBJECT_TEAM_1:
+		pRenderer->DrawSolidRectGauge(
+			m_vec3fPos.x, m_vec3fPos.y + m_fSize * 0.8f, m_vec3fPos.z
+			, OBJECT_GAUGE_WIDTH_FACTOR * m_fSize
+			, OBJECT_GAUGE_HEIGHT_FACTOR * m_fSize
+			, 1, 0, 0, 1
+			, m_fLife / DEFAULT_CHARACTOR_MAX_LIFE
+			, LEVEL_UNIT);
+		break;
+	case ObjectTeam::OBJECT_TEAM_2:
+		pRenderer->DrawSolidRectGauge(
+			m_vec3fPos.x, m_vec3fPos.y + m_fSize * 0.8f, m_vec3fPos.z
+			, OBJECT_GAUGE_WIDTH_FACTOR * m_fSize
+			, OBJECT_GAUGE_HEIGHT_FACTOR * m_fSize
+			, 0, 0, 1, 1
+			, m_fLife / DEFAULT_CHARACTOR_MAX_LIFE
+			, LEVEL_UNIT);
+		break;
+	}
 }
 
 void CharactorObject::CollideWith(GameObject* other)
@@ -159,7 +182,7 @@ void CharactorObject::ShootBullet()
 		bullet = new ArrowObject(
 			m_vec3fPos
 			, DEFAULT_ARROW_SIZE
-			, ARROW_TEAM_1_COLOR
+			, ARROW_TEAM_2_COLOR
 			, m_TeamTag
 			, ObjectType::OBJECT_ARROW);
 		break;

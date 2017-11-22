@@ -1,9 +1,9 @@
 #pragma once
 #include "GameObject.h"
 
-#define DEFAULT_BULLET_MAX_LIFE		20.0f
-#define DEFAULT_BULLET_SPEED		300.0f
-#define DEFAULT_BULLET_SIZE			2.0f
+#define DEFAULT_BULLET_MAX_LIFE		15.0f
+#define DEFAULT_BULLET_SPEED		600.0f
+#define DEFAULT_BULLET_SIZE			4.0f
 
 #define BULLET_TEAM_1_COLOR			Vec4f(1, 0, 0, 1)
 #define BULLET_TEAM_2_COLOR			Vec4f(0, 0, 1, 1)

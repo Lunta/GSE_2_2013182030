@@ -49,6 +49,17 @@ using namespace std::experimental::filesystem;
 #define MOUSE_BUTTON_UP		1
 #define MOUSE_BUTTON_DOWN	0
 
+#define LEVEL_GOD 0.0f
+#define LEVEL_SKY 0.1f
+#define LEVEL_GROUND 0.2f
+#define LEVEL_UNDERGROUND 0.3f
+#define LEVEL_PROJECTILE 0.4f
+#define LEVEL_UNIT 0.5f
+#define LEVEL_BUILDING 0.6f
+
+#define OBJECT_GAUGE_WIDTH_FACTOR	1.0f
+#define OBJECT_GAUGE_HEIGHT_FACTOR	0.1f
+
 template<typename Enum>
 inline constexpr auto GetEnumValueByType(Enum enumerator) noexcept
 {

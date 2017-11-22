@@ -15,6 +15,7 @@ but WITHOUT ANY WARRANTY.
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearDepth(1.f);
 	GameFramework.Render();
 	glutSwapBuffers();
 }

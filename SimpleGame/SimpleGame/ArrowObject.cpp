@@ -56,19 +56,19 @@ void ArrowObject::Update(const double TimeElapsed)
 	}
 
 	if (m_vec3fPos.x > CLIENT_WIDTH / 2 ||
-		m_vec3fPos.x < -CLIENT_WIDTH / 2)
-		m_vec3fDirection.x = -m_vec3fDirection.x;
-	if (m_vec3fPos.y > CLIENT_HEIGHT / 2 ||
+		m_vec3fPos.x < -CLIENT_WIDTH / 2 ||
+		m_vec3fPos.y > CLIENT_HEIGHT / 2 ||
 		m_vec3fPos.y < -CLIENT_HEIGHT / 2)
-		m_vec3fDirection.y = -m_vec3fDirection.y;
+		m_fLife = 0.0f;
 }
 
 void ArrowObject::Render(Renderer * pRenderer)
 {
 	if (!m_bActive) return;
 	pRenderer->DrawSolidRect(
-		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize, 
-		m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a);
+		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize
+		, m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a
+		, LEVEL_PROJECTILE);
 }
 
 void ArrowObject::CollideWith(GameObject* other)
@@ -79,21 +79,24 @@ void ArrowObject::CollideWith(GameObject* other)
 	case GameObject::ObjectType::OBJECT_CHARACTER:
 	{
 		if (m_pLaunchedBy == other) return;
-		if (m_bIsCollision) return;
+		if (m_bIsCollision) break;
 		m_bIsCollision = true;
 		m_fCollisionTimer = 0.0f;
 		m_pTarget = other;
 		m_fLife = 0.0f;
 		m_bActive = false;
+		break;
 	}
 	case GameObject::ObjectType::OBJECT_BUILDING:
 	{
-		if (m_bIsCollision) return;
+		if (m_pLaunchedBy == other) return;
+		if (m_bIsCollision) break;
 		m_bIsCollision = true;
 		m_fCollisionTimer = 0.0f;
 		m_pTarget = other;
 		m_fLife = 0.0f;
 		m_bActive = false;
+		break;
 	}
 	}
 }

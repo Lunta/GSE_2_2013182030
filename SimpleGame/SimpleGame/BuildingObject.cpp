@@ -70,24 +70,38 @@ void BuildingObject::Update(const double TimeElapsed)
 			m_vec4fColor += Vec4f{ 0.1f, 0.1f, 0.1f, 0.0f };
 		}
 	}
-
-	if (m_vec3fPos.x > CLIENT_WIDTH / 2 ||
-		m_vec3fPos.x < -CLIENT_WIDTH / 2)
-		m_vec3fDirection.x = -m_vec3fDirection.x;
-	if (m_vec3fPos.y > CLIENT_HEIGHT / 2 ||
-		m_vec3fPos.y < -CLIENT_HEIGHT / 2)
-		m_vec3fDirection.y = -m_vec3fDirection.y;
 }
 
 void BuildingObject::Render(Renderer * pRenderer)
 {
 	if (!m_bActive) return;
-	//pRenderer->DrawSolidRect(
-	//	m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize,
-	//	m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a);
+
 	pRenderer->DrawTexturedRect(
-		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize,
-		m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a, m_texture);
+		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize
+		, m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a, m_texture
+		, LEVEL_BUILDING);
+
+	switch (m_TeamTag)
+	{
+	case ObjectTeam::OBJECT_TEAM_1:
+		pRenderer->DrawSolidRectGauge(
+			m_vec3fPos.x, m_vec3fPos.y + m_fSize * 0.5f, m_vec3fPos.z
+			, OBJECT_GAUGE_WIDTH_FACTOR * m_fSize
+			, OBJECT_GAUGE_HEIGHT_FACTOR * m_fSize
+			, 1, 0, 0, 1
+			, m_fLife / DEFAULT_BUILDING_MAX_LIFE
+			, LEVEL_UNIT);
+		break;
+	case ObjectTeam::OBJECT_TEAM_2:
+		pRenderer->DrawSolidRectGauge(
+			m_vec3fPos.x, m_vec3fPos.y + m_fSize * 0.5f, m_vec3fPos.z
+			, OBJECT_GAUGE_WIDTH_FACTOR * m_fSize
+			, OBJECT_GAUGE_HEIGHT_FACTOR * m_fSize
+			, 0, 0, 1, 1
+			, m_fLife / DEFAULT_BUILDING_MAX_LIFE
+			, LEVEL_UNIT);
+		break;
+	}
 }
 
 void BuildingObject::CollideWith(GameObject * other)
@@ -111,6 +125,21 @@ void BuildingObject::CollideWith(GameObject * other)
 		break;
 	}
 	case GameObject::ObjectType::OBJECT_ARROW:
+	{
+		if (m_bIsCollision) return;
+		m_bIsCollision = true;
+		m_fCollisionTimer = 0.0f;
+		m_pTarget = other;
+		m_fLife -= other->GetLife();
+		m_vec4fColor -= Vec4f{ 0.1f, 0.1f, 0.1f, 0.0f };
+		if (m_fLife <= 0.0f)
+		{
+			m_fLife = 0.0f;
+			m_bActive = false;
+		}
+		break;
+	}
+	case GameObject::ObjectType::OBJECT_BULLET:
 	{
 		if (m_bIsCollision) return;
 		m_bIsCollision = true;

@@ -29,7 +29,7 @@ void MainScene::BuildObjects()
 			, building_pos_y
 			, 0)
 			, DEFAULT_BUILDING_SIZE
-			, Vec4f()
+			, Vec4f(1, 1, 1, 1)
 			, GameObject::ObjectTeam::OBJECT_TEAM_1
 			, GameObject::ObjectType::OBJECT_BUILDING);
 		obj->LoadTexture(m_pRenderer, BUILDING_TEAM_1_TEXTURE_PATH);
@@ -41,7 +41,7 @@ void MainScene::BuildObjects()
 			, -building_pos_y
 			, 0)
 			, DEFAULT_BUILDING_SIZE
-			, Vec4f()
+			, Vec4f(1, 1, 1, 1)
 			, GameObject::ObjectTeam::OBJECT_TEAM_2
 			, GameObject::ObjectType::OBJECT_BUILDING);
 		obj->LoadTexture(m_pRenderer, BUILDING_TEAM_2_TEXTURE_PATH);

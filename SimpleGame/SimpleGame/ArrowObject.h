@@ -3,7 +3,7 @@
 
 #define DEFAULT_ARROW_MAX_LIFE	10.0f
 #define DEFAULT_ARROW_SPEED		100.0f
-#define DEFAULT_ARROW_SIZE		2.0f
+#define DEFAULT_ARROW_SIZE		4.0f
 
 #define ARROW_TEAM_1_COLOR		Vec4f(0.5, 0.2, 0.7, 1)
 #define ARROW_TEAM_2_COLOR		Vec4f(1, 1, 0, 1)
