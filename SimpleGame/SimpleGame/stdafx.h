@@ -56,6 +56,7 @@ using namespace std::experimental::filesystem;
 #define LEVEL_PROJECTILE 0.4f
 #define LEVEL_UNIT 0.5f
 #define LEVEL_BUILDING 0.6f
+#define LEVEL_BACKGROUND 0.7f
 
 #define OBJECT_GAUGE_WIDTH_FACTOR	1.0f
 #define OBJECT_GAUGE_HEIGHT_FACTOR	0.1f

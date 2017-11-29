@@ -2,11 +2,11 @@
 #include "BuildingObject.h"
 #include "Renderer.h"
 #include "BulletObject.h"
+#include "Framework.h"
 
 BuildingObject::BuildingObject(ObjectTeam team, ObjectType tag)
 	: GameObject(team, tag)
 	, m_fShootTimer(0.f)
-	, m_texture(0)
 {
 	m_fLife = DEFAULT_BUILDING_MAX_LIFE;
 }
@@ -18,7 +18,6 @@ BuildingObject::BuildingObject(
 	, ObjectType tag)
 	: GameObject(pos, size, color, team, tag)
 	, m_fShootTimer(0.f)
-	, m_texture(0)
 {
 	m_fLife = DEFAULT_BUILDING_MAX_LIFE;
 }
@@ -29,7 +28,6 @@ BuildingObject::BuildingObject(
 	, ObjectType tag)
 	: GameObject(x, y, z, size, r, g, b, a, team, tag)
 	, m_fShootTimer(0.f)
-	, m_texture(0)
 {
 	m_fLife = DEFAULT_BUILDING_MAX_LIFE;
 }
@@ -78,7 +76,7 @@ void BuildingObject::Render(Renderer * pRenderer)
 
 	pRenderer->DrawTexturedRect(
 		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize
-		, m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a, m_texture
+		, m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a, m_iTexture
 		, LEVEL_BUILDING);
 
 	switch (m_TeamTag)
@@ -162,11 +160,6 @@ void BuildingObject::SetBulletList(std::list<GameObject*>* bullet_list)
 	m_BulletList = bullet_list;
 }
 
-void BuildingObject::LoadTexture(Renderer * pRenderer, path texPath)
-{
-	m_texture = pRenderer->CreatePngTexture(&texPath.string()[0]);
-}
-
 void BuildingObject::ShootBullet()
 {
 	if (!m_BulletList) return;
@@ -194,5 +187,7 @@ void BuildingObject::ShootBullet()
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
 		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
 	bullet->SetLaunchedBy(this);
+	bullet->SetTexture(m_iBulletTexture);
+	bullet->SetTextureSize({ 8, 3 });
 	m_BulletList->push_back(bullet);
 }

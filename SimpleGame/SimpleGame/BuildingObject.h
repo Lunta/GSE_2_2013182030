@@ -12,8 +12,8 @@ class BuildingObject : public GameObject
 {
 private:
 	float						m_fShootTimer;
-	unsigned int				m_texture;
-	std::list<GameObject*>		*m_BulletList;
+	std::list<GameObject*>*		m_BulletList;
+	UINT						m_iBulletTexture;
 
 public:
 	BuildingObject(ObjectTeam team, ObjectType tag = ObjectType::OBJECT_BUILDING);
@@ -36,8 +36,8 @@ public:
 	virtual void CollideWith(GameObject* other);
 
 	void SetBulletList(std::list<GameObject*>* bullet_list);
+	void SetBulletTexture(UINT textureID) { m_iBulletTexture = textureID; }
 
-	void LoadTexture(Renderer * pRenderer, path texPath);
 	void ShootBullet();
 };
 

@@ -27,6 +27,10 @@ protected:
 	ObjectType			m_TypeTag;
 	bool				m_bActive;
 
+	UINT				m_iTexture;
+	Vec2i				m_vec2iImgSize;
+	Vec2f				m_vec2fCurrImg;
+
 	Vec3f				m_vec3fPos;
 	Vec4f				m_vec4fColor;
 	float				m_fSize;
@@ -62,6 +66,8 @@ public:
 
 	virtual void CollideWith(GameObject* other) = 0;
 
+	void LoadTexture(Renderer * pRenderer, char* path);
+
 	void Awake() { m_bActive = true; };
 	void Sleep() { m_bActive = false; };
 
@@ -77,13 +83,15 @@ public:
 	void SetSpeed(float speed);
 	void SetLife(float life);
 	void SetLifeTime(float life_time);
+	void SetTextureSize(const Vec2i& sz);
+	void SetTexture(UINT textureID) { m_iTexture = textureID; }
 
 	const ObjectTeam&	GetTeamTag()	const { return m_TeamTag; }
 	const ObjectType&	GetTag()		const { return m_TypeTag; }
 	const Vec3f&		GetPos()		const { return m_vec3fPos; }
+	const BindingBox&	GetBindingBox() const { return m_BindingBox; }
 	float				GetSize()		const { return m_fSize; }
 	float				GetLife()		const { return m_fLife; }
-	const BindingBox&	GetBindingBox() const { return m_BindingBox; }
 
 	bool IsActive() const { return m_bActive; }
 	bool IsCollide() const { return m_bIsCollision; }

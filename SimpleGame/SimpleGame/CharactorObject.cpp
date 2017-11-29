@@ -53,11 +53,16 @@ void CharactorObject::Update(const double TimeElapsed)
 	m_BindingBox.SetPos(m_vec3fPos);
 	m_fLifeTimer -= TimeElapsed;
 	m_fShootTimer += TimeElapsed;
+
 	if (m_fShootTimer > DEFAULT_CHARACTOR_SHOOT_DELAY) 
 	{
 		m_fShootTimer = 0.f;
 		ShootBullet();
 	}
+
+	m_vec2fCurrImg.x += TimeElapsed * CHARACTOR_TEXTURE_ANIMATION_SPEED;
+	if (m_vec2fCurrImg.x >= m_vec2iImgSize.x)
+		m_vec2fCurrImg.x -= m_vec2iImgSize.x;
 
 	if (m_bIsCollision)
 	{
@@ -77,14 +82,35 @@ void CharactorObject::Update(const double TimeElapsed)
 	if (m_vec3fPos.y > CLIENT_HEIGHT / 2 ||
 		m_vec3fPos.y < -CLIENT_HEIGHT / 2)
 		m_vec3fDirection.y = -m_vec3fDirection.y;
+
+	float absDirX = abs(m_vec3fDirection.x);
+	float absDirY = abs(m_vec3fDirection.y);
+	if (absDirX < absDirY)
+	{
+		if (m_vec3fDirection.y > 0)
+			m_vec2fCurrImg.y = CHARACTOR_TEXTURE_UP;
+		else if (m_vec3fDirection.y < 0)
+			m_vec2fCurrImg.y = CHARACTOR_TEXTURE_DOWN;
+	}
+	else if (absDirX > absDirY)
+	{
+		if (m_vec3fDirection.x > 0)
+			m_vec2fCurrImg.y = CHARACTOR_TEXTURE_RIGHT;
+		else if (m_vec3fDirection.x < 0)
+			m_vec2fCurrImg.y = CHARACTOR_TEXTURE_LEFT;
+	}
+	
 }
 
 void CharactorObject::Render(Renderer * pRenderer)
 {
 	if (!m_bActive) return;
-	pRenderer->DrawSolidRect(
+	pRenderer->DrawTexturedRectSeq(
 		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize
 		, m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a
+		, m_iTexture
+		, (int)m_vec2fCurrImg.x, (int)m_vec2fCurrImg.y
+		, m_vec2iImgSize.x, m_vec2iImgSize.y
 		, LEVEL_UNIT);
 
 	switch (m_TeamTag)

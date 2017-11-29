@@ -14,8 +14,6 @@ protected:
 	Type		m_tag;
 	Renderer*	m_pRenderer;
 
-	Vec4f		m_vec4fBackgroundColor;
-
 public:
 	Scene() = delete;
 	Scene(const Type& tag);

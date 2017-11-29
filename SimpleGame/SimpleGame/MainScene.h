@@ -11,6 +11,8 @@ class GameObject;
 class MainScene final : public Scene
 {
 private:
+	UINT						m_BackGroundTexture;
+
 	std::list<GameObject*>		m_pCharactorList;
 	std::list<GameObject*>		m_pBuildingList;
 	std::list<GameObject*>		m_pBulletList;

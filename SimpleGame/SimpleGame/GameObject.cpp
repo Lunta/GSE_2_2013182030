@@ -7,8 +7,10 @@ GameObject::GameObject(ObjectTeam team, ObjectType tag)
 	: m_TypeTag(tag)
 	, m_TeamTag(team)
 	, m_bActive(true)
+	, m_iTexture(0)
+	, m_vec2fCurrImg(Vec2f())
 	, m_vec3fPos({ 0, 0, 0 })
-	, m_vec4fColor({ 0, 0, 0, 1 })
+	, m_vec4fColor({ 1, 1, 1, 1 })
 	, m_fSize(0.0f)
 	, m_vec3fDirection(0, 0, 0)
 	, m_fSpeed(0.0f)
@@ -29,6 +31,8 @@ GameObject::GameObject(
 	: m_TypeTag(tag)
 	, m_TeamTag(team)
 	, m_bActive(true)
+	, m_iTexture(0)
+	, m_vec2fCurrImg(Vec2f())
 	, m_vec3fPos(pos)
 	, m_vec4fColor(color)
 	, m_fSize(size)
@@ -50,6 +54,8 @@ GameObject::GameObject(
 	: m_TypeTag(tag)
 	, m_TeamTag(team)
 	, m_bActive(true)
+	, m_iTexture(0)
+	, m_vec2fCurrImg(Vec2f())
 	, m_vec3fPos({ x, y, z })
 	, m_vec4fColor({ r, g, b, a })
 	, m_fSize(size)
@@ -61,10 +67,15 @@ GameObject::GameObject(
 	, m_fCollisionTimer(0)
 	, m_fLife(DEFAULT_MAX_LIFE)
 	, m_fLifeTimer(DEFAULT_LIFE_TIME)
-{	
+{
 }
 GameObject::~GameObject()
 {
+}
+
+void GameObject::LoadTexture(Renderer * pRenderer, char * path)
+{
+	m_iTexture = pRenderer->CreatePngTexture(path);
 }
 
 void GameObject::SetParameter(const Vec3f& pos, float size, const Vec4f& color)
@@ -136,4 +147,9 @@ void GameObject::SetLife(float life)
 void GameObject::SetLifeTime(float life_time)
 {
 	m_fLifeTimer = life_time;
+}
+
+void GameObject::SetTextureSize(const Vec2i & sz)
+{
+	m_vec2iImgSize = sz;
 }

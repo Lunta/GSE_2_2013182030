@@ -2,9 +2,8 @@
 #include "Scene.h"
 #include "Framework.h"
 
-Scene::Scene(const Type& tag) :
-	m_pRenderer(nullptr), 
-	m_vec4fBackgroundColor({ 0.0f, 0.0f, 0.0f, 1.0f })
+Scene::Scene(const Type& tag)
+	: m_pRenderer(nullptr)
 {
 	m_tag = tag;
 }

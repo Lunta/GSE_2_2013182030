@@ -3,6 +3,7 @@
 #include "Framework.h"
 #include "CharactorObject.h"
 #include "BuildingObject.h"
+#include "BulletObject.h"
 
 MainScene::MainScene(const Type& tag) 
 	: Scene(tag)
@@ -18,7 +19,9 @@ MainScene::~MainScene()
 void MainScene::BuildObjects()
 {
 	Scene::BuildObjects();
-	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
+	m_BackGroundTexture = m_pRenderer->CreatePngTexture("./Assets/tile.png");
+	UINT bullet_texture1 = m_pRenderer->CreatePngTexture(BULLET_TEAM_1_PARTICLE_TEXTURE_PATH);
+	UINT bullet_texture2 = m_pRenderer->CreatePngTexture(BULLET_TEAM_2_PARTICLE_TEXTURE_PATH);
 	
 	float building_stride_width = (float)CLIENT_WIDTH * 0.25f;
 	float building_pos_y = (float)CLIENT_HEIGHT * 0.4f;
@@ -34,6 +37,7 @@ void MainScene::BuildObjects()
 			, GameObject::ObjectType::OBJECT_BUILDING);
 		obj->LoadTexture(m_pRenderer, BUILDING_TEAM_1_TEXTURE_PATH);
 		obj->SetBulletList(&m_pBulletList);
+		obj->SetBulletTexture(bullet_texture1);
 		m_pBuildingList.push_back(obj);
 
 		obj = new BuildingObject(Vec3f(
@@ -46,10 +50,9 @@ void MainScene::BuildObjects()
 			, GameObject::ObjectType::OBJECT_BUILDING);
 		obj->LoadTexture(m_pRenderer, BUILDING_TEAM_2_TEXTURE_PATH);
 		obj->SetBulletList(&m_pBulletList);
+		obj->SetBulletTexture(bullet_texture2);
 		m_pBuildingList.push_back(obj);
 	}
-	
-	
 }
 
 void MainScene::ReleaseObjects()
@@ -75,7 +78,7 @@ void MainScene::Update(const double TimeElapsed)
 		p->Update(TimeElapsed);
 	for (auto& p : m_pCharactorList)
 		p->Update(TimeElapsed);
-	
+
 	PhysicsProcess(TimeElapsed);
 }
 
@@ -106,6 +109,7 @@ void MainScene::PrepareUpdate(const double TimeElapsed)
 void MainScene::PhysicsProcess(const double TimeElapsed)
 {
 	for (auto& p : m_pBuildingList)
+	{
 		for (auto& q : m_pCharactorList)
 		{
 			if (p->GetTeamTag() == q->GetTeamTag()) continue;
@@ -116,6 +120,8 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 				q->CollideWith(p);
 			}
 		}
+	}
+		
 	for (auto& q : m_pBulletList)
 	{
 		for (auto& p : m_pCharactorList)
@@ -143,11 +149,9 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 
 void MainScene::Render()
 {
-	glClearColor(
-		m_vec4fBackgroundColor.r,
-		m_vec4fBackgroundColor.g,
-		m_vec4fBackgroundColor.b,
-		m_vec4fBackgroundColor.a);
+	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	m_pRenderer->DrawTexturedRect(0, 0, 0, CLIENT_HEIGHT
+		, 1, 1, 1, 1, m_BackGroundTexture, LEVEL_BACKGROUND);
 
 	for (auto& p : m_pBuildingList)
 		p->Render(m_pRenderer);
@@ -243,6 +247,8 @@ void MainScene::RandomSpawnCharactor(GameObject::ObjectTeam team)
 				, CHARACTOR_TEAM_1_COLOR
 				, GameObject::ObjectTeam::OBJECT_TEAM_1
 				, GameObject::ObjectType::OBJECT_CHARACTER);
+			obj->LoadTexture(m_pRenderer, CHARACTOR_TEXTURE_PATH);
+			obj->SetTextureSize({ 4,4 });
 			obj->SetDirection(
 				(rand() % 2000) - (rand() / 1000),
 				(rand() % 2000) - (rand() / 1000));
@@ -260,6 +266,8 @@ void MainScene::RandomSpawnCharactor(GameObject::ObjectTeam team)
 				, CHARACTOR_TEAM_2_COLOR
 				, GameObject::ObjectTeam::OBJECT_TEAM_2
 				, GameObject::ObjectType::OBJECT_CHARACTER);
+			obj->LoadTexture(m_pRenderer, CHARACTOR_TEXTURE_PATH);
+			obj->SetTextureSize({ 4,4 });
 			obj->SetDirection(
 				(rand() % 2000) - (rand() / 1000),
 				(rand() % 2000) - (rand() / 1000));
@@ -298,6 +306,8 @@ void MainScene::SpawnCharactor(const Vec3f & pos)
 				, CHARACTOR_TEAM_2_COLOR
 				, GameObject::ObjectTeam::OBJECT_TEAM_2
 				, GameObject::ObjectType::OBJECT_CHARACTER);
+			obj->LoadTexture(m_pRenderer, CHARACTOR_TEXTURE_PATH);
+			obj->SetTextureSize({ 4,4 });
 			obj->SetDirection(
 				(rand() % 2000) - (rand() / 1000),
 				(rand() % 2000) - (rand() / 1000));

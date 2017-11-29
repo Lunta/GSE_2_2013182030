@@ -13,7 +13,6 @@ TitleScene::~TitleScene()
 void TitleScene::BuildObjects()
 {
 	Scene::BuildObjects();
-	m_vec4fBackgroundColor = { 0.0f, 0.3f, 0.3f, 1.0f };
 	m_pTestObject = new ArrowObject(
 		Vec3f()
 		, DEFAULT_ARROW_SIZE
@@ -42,11 +41,7 @@ void TitleScene::PhysicsProcess(const double TimeElapsed)
 
 void TitleScene::Render()
 {
-	glClearColor(
-		m_vec4fBackgroundColor.r, 
-		m_vec4fBackgroundColor.g, 
-		m_vec4fBackgroundColor.b, 
-		m_vec4fBackgroundColor.a);
+	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
 	m_pTestObject->Render(m_pRenderer);
 }
