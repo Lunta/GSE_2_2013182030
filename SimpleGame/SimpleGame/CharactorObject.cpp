@@ -76,12 +76,26 @@ void CharactorObject::Update(const double TimeElapsed)
 		}
 	}
 
-	if (m_vec3fPos.x > CLIENT_WIDTH / 2 ||
-		m_vec3fPos.x < -CLIENT_WIDTH / 2)
+	if (m_vec3fPos.x > CLIENT_WIDTH / 2)
+	{
 		m_vec3fDirection.x = -m_vec3fDirection.x;
-	if (m_vec3fPos.y > CLIENT_HEIGHT / 2 ||
-		m_vec3fPos.y < -CLIENT_HEIGHT / 2)
+		m_vec3fPos.x = CLIENT_WIDTH / 2;
+	}
+	else if (m_vec3fPos.x < -CLIENT_WIDTH / 2)
+	{
+		m_vec3fDirection.x = -m_vec3fDirection.x;
+		m_vec3fPos.x = -CLIENT_WIDTH / 2;
+	}
+	if (m_vec3fPos.y > CLIENT_HEIGHT / 2)
+	{
 		m_vec3fDirection.y = -m_vec3fDirection.y;
+		m_vec3fPos.y = CLIENT_HEIGHT / 2;
+	}
+	else if(m_vec3fPos.y < -CLIENT_HEIGHT / 2)
+	{
+		m_vec3fDirection.y = -m_vec3fDirection.y;
+		m_vec3fPos.y = -CLIENT_HEIGHT / 2;
+	}
 
 	float absDirX = abs(m_vec3fDirection.x);
 	float absDirY = abs(m_vec3fDirection.y);
@@ -134,6 +148,11 @@ void CharactorObject::Render(Renderer * pRenderer)
 			, LEVEL_UNIT);
 		break;
 	}
+	pRenderer->DrawTextW(
+		m_vec3fPos.x + m_fSize * 0.5f, m_vec3fPos.y + m_fSize * 0.6f
+		, GLUT_BITMAP_HELVETICA_10
+		, 1, 1, 1
+		, &std::to_string(static_cast<int>(m_fLife))[0]);
 }
 
 void CharactorObject::CollideWith(GameObject* other)

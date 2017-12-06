@@ -5,6 +5,8 @@
 #define MAX_OBJECTS_COUNT				100
 #define TEAM_1_CHARACTOR_RESPAWN_DELAY	1.0f
 #define TEAM_2_CHARACTOR_RESPAWN_DELAY	2.0f
+#define MAIN_SCENE_SHAKING_TIME			0.5f
+#define MAIN_SCENE_SHAKING_FACTOR		10.f
 
 class GameObject;
 
@@ -19,6 +21,11 @@ private:
 
 	float						m_fTeam1_SpawnTimer;
 	float						m_fTeam2_SpawnTimer;
+
+	bool						m_bShake;
+	float						m_fShakingTimer;
+	float						m_fShakingFactor;
+	Vec2f						m_vec2fShakingVelocity;
 
 public:
 	MainScene(const Type& tag);

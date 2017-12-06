@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "SoundManager.h"
 #include "Framework.h"
 #include "GameTimer.h"
 
@@ -6,7 +7,9 @@
 #include "MainScene.h"
 
 
-Framework::Framework() : m_pCurrentScene(nullptr)
+Framework::Framework() 
+	: m_pCurrentScene(nullptr)
+	, m_pSound(nullptr)
 {
 	for (int i = 0; i < SceneTypeToIdx(Count); ++i)
 		m_pSceneArr[i] = nullptr;
@@ -15,6 +18,7 @@ Framework::~Framework()
 {
 	for (int i = 0; i < SceneTypeToIdx(Count); ++i)
 		if(m_pSceneArr[i]) delete m_pSceneArr[i];
+	if (m_pSound) delete m_pSound;
 }
 
 void Framework::Init(int client_width, int client_height)
@@ -24,23 +28,27 @@ void Framework::Init(int client_width, int client_height)
 
 	Timer.Init();
 
-	BuildScenes();
 	BuildObjects();
+	BuildScenes();
 
 	std::cout << "\n\n The game framework is ready to run.\n";
 }
 
 void Framework::BuildObjects()
 {
+	m_pSound = new CSoundManager();
+	m_pSound->Init();
 }
 
 void Framework::BuildScenes()
 {
 	m_pSceneArr[SceneTypeToIdx(Title)] = new TitleScene(Scene::Type::Title);
 	m_pSceneArr[SceneTypeToIdx(Title)]->BuildObjects();
+	m_pSceneArr[SceneTypeToIdx(Title)]->SetSound(m_pSound);
 
 	m_pSceneArr[SceneTypeToIdx(Main)] = new MainScene(Scene::Type::Main);
 	m_pSceneArr[SceneTypeToIdx(Main)]->BuildObjects();
+	m_pSceneArr[SceneTypeToIdx(Main)]->SetSound(m_pSound);
 
 	m_pCurrentScene = m_pSceneArr[SceneTypeToIdx(Main)];
 }

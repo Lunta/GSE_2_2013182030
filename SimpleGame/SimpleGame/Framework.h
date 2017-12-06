@@ -1,15 +1,18 @@
 #pragma once
 #include "Scene.h"
 
+class Sound;
 class Framework final
 {
 private:
-	std::string			m_strTitle;
-	int					m_iClientWidth;
-	int					m_iClientHeight;
+	std::string				m_strTitle;
+	int						m_iClientWidth;
+	int						m_iClientHeight;
 
-	Scene*				m_pSceneArr[SceneTypeToIdx(Count)];
-	Scene*				m_pCurrentScene;
+	Scene*					m_pSceneArr[SceneTypeToIdx(Count)];
+	Scene*					m_pCurrentScene;
+
+	CSoundManager*			m_pSound;
 
 private:
 	Framework();

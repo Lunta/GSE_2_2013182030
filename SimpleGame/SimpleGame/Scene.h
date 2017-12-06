@@ -1,5 +1,6 @@
 #pragma once
 #include "Renderer.h"
+#include "SoundManager.h"
 
 class Scene
 {
@@ -11,8 +12,9 @@ public:
 	};
 
 protected:
-	Type		m_tag;
-	Renderer*	m_pRenderer;
+	Type				m_tag;
+	Renderer*			m_pRenderer;
+	CSoundManager*		m_pSound;
 
 public:
 	Scene() = delete;
@@ -31,6 +33,7 @@ public:
 	virtual void Input_SpecialKey(int key, int x, int y) = 0;
 	virtual void Input_MouseButton(int button, int state, int x, int y) = 0;
 
+	void SetSound(CSoundManager* pSound) { m_pSound = pSound; }
 	const Type& GetTag() { return m_tag; }
 };
 

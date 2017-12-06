@@ -55,6 +55,12 @@
     <Filter Include="GameObject\BulletObject">
       <UniqueIdentifier>{07acbecb-40c9-402c-974e-e1f11876729f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{fdc5ce89-9ec1-4bb4-828f-847c86896112}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound\SoundManager">
+      <UniqueIdentifier>{879b11aa-5a45-4214-80bb-c8403bf81339}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -108,6 +114,12 @@
     <ClInclude Include="BulletObject.h">
       <Filter>GameObject\BulletObject</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Sound\SoundManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SimpleGame.cpp">
@@ -154,6 +166,12 @@
     </ClCompile>
     <ClCompile Include="BulletObject.cpp">
       <Filter>GameObject\BulletObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Sound\SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,6 +9,10 @@ MainScene::MainScene(const Type& tag)
 	: Scene(tag)
 	, m_fTeam1_SpawnTimer(0)
 	, m_fTeam2_SpawnTimer(0)
+	, m_bShake(false)
+	, m_fShakingTimer(0)
+	, m_fShakingFactor(MAIN_SCENE_SHAKING_FACTOR)
+	, m_vec2fShakingVelocity()
 {
 }
 MainScene::~MainScene()
@@ -72,6 +76,22 @@ void MainScene::Update(const double TimeElapsed)
 {
 	PrepareUpdate(TimeElapsed);
 
+	if (m_bShake)
+	{
+		m_vec2fShakingVelocity = m_fShakingFactor * Normalize(Vec2f{
+			  static_cast<float>(rand() % 1000 - 500)
+			, static_cast<float>(rand() % 1000 - 500) });
+		m_fShakingTimer += TimeElapsed;
+		m_fShakingFactor -= TimeElapsed;
+		if (m_fShakingTimer > MAIN_SCENE_SHAKING_TIME)
+		{
+			m_bShake = false;
+			m_fShakingTimer = 0.f;
+			m_fShakingFactor = MAIN_SCENE_SHAKING_FACTOR;
+			m_vec2fShakingVelocity = Vec2f();
+		}
+	}
+
 	for (auto& p : m_pBuildingList)
 		p->Update(TimeElapsed);
 	for (auto& p : m_pBulletList)
@@ -118,6 +138,11 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 			{
 				p->CollideWith(q);
 				q->CollideWith(p);
+				if (p->IsCollide() || q->IsCollide())
+				{
+					m_bShake = true;
+					m_pSound->PlaySoundByTag(CSoundManager::SoundTag::Explosion, false, 0.2f);
+				}
 			}
 		}
 	}
@@ -142,6 +167,11 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 			{
 				p->CollideWith(q);
 				q->CollideWith(p);
+				if (p->IsCollide() || q->IsCollide())
+				{
+					m_bShake = true;
+					m_pSound->PlaySoundByTag(CSoundManager::SoundTag::Explosion, false, 0.2f);
+				}
 			}
 		}
 	}
@@ -150,6 +180,10 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 void MainScene::Render()
 {
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	m_pRenderer->SetSceneTransform(
+		  m_vec2fShakingVelocity.x
+		, m_vec2fShakingVelocity.y
+		, 1, 1);
 	m_pRenderer->DrawTexturedRect(0, 0, 0, CLIENT_HEIGHT
 		, 1, 1, 1, 1, m_BackGroundTexture, LEVEL_BACKGROUND);
 

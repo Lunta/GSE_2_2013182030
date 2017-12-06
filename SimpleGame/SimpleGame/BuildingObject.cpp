@@ -89,6 +89,7 @@ void BuildingObject::Render(Renderer * pRenderer)
 			, 1, 0, 0, 1
 			, m_fLife / DEFAULT_BUILDING_MAX_LIFE
 			, LEVEL_UNIT);
+		
 		break;
 	case ObjectTeam::OBJECT_TEAM_2:
 		pRenderer->DrawSolidRectGauge(
@@ -100,6 +101,11 @@ void BuildingObject::Render(Renderer * pRenderer)
 			, LEVEL_UNIT);
 		break;
 	}
+	pRenderer->DrawTextW(
+		  m_vec3fPos.x + m_fSize * 0.5f, m_vec3fPos.y + m_fSize * 0.47f
+		, GLUT_BITMAP_HELVETICA_10
+		, 1, 1, 1
+		, &std::to_string(static_cast<int>(m_fLife))[0]);
 }
 
 void BuildingObject::CollideWith(GameObject * other)
