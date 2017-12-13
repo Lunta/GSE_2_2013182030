@@ -1,14 +1,15 @@
 #include "stdafx.h"
+#include "Particle.h"
 #include "BulletObject.h"
 
 #include "Renderer.h"
 
 BulletObject::BulletObject(ObjectTeam team, ObjectType tag)
 	: GameObject(team, tag)
-	, m_fParticleTimer(0)
 {
 	m_fLife = DEFAULT_BULLET_MAX_LIFE;
 	m_fSpeed = DEFAULT_BULLET_SPEED;
+	m_pParticle = new Particle(m_vec3fPos, m_vec3fDirection);
 }
 BulletObject::BulletObject(
 	const Vec3f & pos
@@ -17,10 +18,10 @@ BulletObject::BulletObject(
 	, ObjectTeam team
 	, ObjectType tag)
 	: GameObject(pos, size, color, team, tag)
-	, m_fParticleTimer(0)
 {
 	m_fLife = DEFAULT_BULLET_MAX_LIFE;
 	m_fSpeed = DEFAULT_BULLET_SPEED;
+	m_pParticle = new Particle(m_vec3fPos, m_vec3fDirection);
 }
 BulletObject::BulletObject(
 	float x, float y, float z
@@ -29,23 +30,33 @@ BulletObject::BulletObject(
 	, ObjectTeam team
 	, ObjectType tag)
 	: GameObject(x, y, z, size, r, g, b, a, team, tag)
-	, m_fParticleTimer(0)
 {
 	m_fLife = DEFAULT_BULLET_MAX_LIFE;
 	m_fSpeed = DEFAULT_BULLET_SPEED;
+	m_pParticle = new Particle(m_vec3fPos, m_vec3fDirection);
 }
 BulletObject::~BulletObject()
 {
+	if (m_pParticle) delete m_pParticle;
 }
 
 void BulletObject::Update(const double TimeElapsed)
 {
 	if (!m_bActive) return;
 	m_vec3fPos += m_vec3fDirection * m_fSpeed * TimeElapsed;
-	m_fParticleTimer += TimeElapsed;
 	m_fLifeTimer -= TimeElapsed;
 
 	m_BindingBox.SetPos(m_vec3fPos);
+	if (m_pParticle) {
+		m_pParticle->SetPos(m_vec3fPos);
+		m_pParticle->SetDirection(m_vec3fDirection);
+		m_pParticle->Update(TimeElapsed);
+		if (m_pParticle->IsDie())
+		{
+			delete m_pParticle;
+			m_pParticle = nullptr;
+		}
+	}
 	if (m_bIsCollision)
 	{
 		m_fCollisionTimer += TimeElapsed;
@@ -71,11 +82,7 @@ void BulletObject::Render(Renderer * pRenderer)
 		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize
 		, m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a
 		, LEVEL_PROJECTILE);
-	pRenderer->DrawParticle(
-		m_vec3fPos.x, m_vec3fPos.y, m_vec3fPos.z, m_fSize
-		, m_vec4fColor.r, m_vec4fColor.g, m_vec4fColor.b, m_vec4fColor.a
-		, -m_vec3fDirection.x, -m_vec3fDirection.y, m_iTexture
-		, m_fParticleTimer);
+	if (m_pParticle) m_pParticle->Render(pRenderer);
 }
 
 void BulletObject::CollideWith(GameObject* other)
@@ -106,6 +113,18 @@ void BulletObject::CollideWith(GameObject* other)
 		break;
 	}
 	}
+}
+
+void BulletObject::LoadTexture(Renderer * pRenderer, char * path)
+{
+	m_iTexture = pRenderer->CreatePngTexture(path);
+	if (m_pParticle) m_pParticle->LoadTexture(pRenderer, path);
+}
+
+void BulletObject::SetTexture(UINT textureID)
+{
+	m_iTexture = textureID;
+	if (m_pParticle) m_pParticle->SetTexture(textureID);
 }
 
 void BulletObject::SetLaunchedBy(GameObject * other)

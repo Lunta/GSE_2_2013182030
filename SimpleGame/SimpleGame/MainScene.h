@@ -15,6 +15,9 @@ class MainScene final : public Scene
 private:
 	UINT						m_BackGroundTexture;
 
+	UINT						m_ClimateTexture;
+	float						m_fClimateTimer;
+
 	std::list<GameObject*>		m_pCharactorList;
 	std::list<GameObject*>		m_pBuildingList;
 	std::list<GameObject*>		m_pBulletList;

@@ -15,11 +15,13 @@ public:
 		, OBJECT_CHARACTER
 		, OBJECT_BULLET
 		, OBJECT_ARROW
+		, OBJECT_PARTICLE
 	};
 
 	enum class ObjectTeam {
 		  OBJECT_TEAM_1 = 0
 		, OBJECT_TEAM_2
+		, OBJECT_TEAM_NONE
 	};
 
 protected:
@@ -66,7 +68,8 @@ public:
 
 	virtual void CollideWith(GameObject* other) = 0;
 
-	void LoadTexture(Renderer * pRenderer, char* path);
+	virtual void LoadTexture(Renderer * pRenderer, char* path);
+	virtual void SetTexture(UINT textureID) { m_iTexture = textureID; }
 
 	void Awake() { m_bActive = true; };
 	void Sleep() { m_bActive = false; };
@@ -84,7 +87,6 @@ public:
 	void SetLife(float life);
 	void SetLifeTime(float life_time);
 	void SetTextureSize(const Vec2i& sz);
-	void SetTexture(UINT textureID) { m_iTexture = textureID; }
 
 	const ObjectTeam&	GetTeamTag()	const { return m_TeamTag; }
 	const ObjectType&	GetTag()		const { return m_TypeTag; }
@@ -95,8 +97,7 @@ public:
 
 	bool IsActive() const { return m_bActive; }
 	bool IsCollide() const { return m_bIsCollision; }
-	bool IsDie() const {
-		return (m_fLifeTimer <= 0.0f || m_fLife <= 0.0f); }
+	virtual bool IsDie() const { return (m_fLifeTimer <= 0.0f || m_fLife <= 0.0f); }
 };
 
 

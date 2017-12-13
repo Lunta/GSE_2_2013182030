@@ -7,6 +7,7 @@
 
 MainScene::MainScene(const Type& tag) 
 	: Scene(tag)
+	, m_fClimateTimer(0)
 	, m_fTeam1_SpawnTimer(0)
 	, m_fTeam2_SpawnTimer(0)
 	, m_bShake(false)
@@ -24,6 +25,7 @@ void MainScene::BuildObjects()
 {
 	Scene::BuildObjects();
 	m_BackGroundTexture = m_pRenderer->CreatePngTexture("./Assets/tile.png");
+	m_ClimateTexture = m_pRenderer->CreatePngTexture("./Assets/ice.png");
 	UINT bullet_texture1 = m_pRenderer->CreatePngTexture(BULLET_TEAM_1_PARTICLE_TEXTURE_PATH);
 	UINT bullet_texture2 = m_pRenderer->CreatePngTexture(BULLET_TEAM_2_PARTICLE_TEXTURE_PATH);
 	
@@ -117,6 +119,7 @@ void MainScene::PrepareUpdate(const double TimeElapsed)
 		if (pObj->IsDie()) { delete pObj; return true; }
 		return false; });
 
+	m_fClimateTimer += TimeElapsed;
 	m_fTeam1_SpawnTimer += TimeElapsed;
 	if (m_fTeam1_SpawnTimer > TEAM_1_CHARACTOR_RESPAWN_DELAY)
 	{
@@ -184,8 +187,11 @@ void MainScene::Render()
 		  m_vec2fShakingVelocity.x
 		, m_vec2fShakingVelocity.y
 		, 1, 1);
+
 	m_pRenderer->DrawTexturedRect(0, 0, 0, CLIENT_HEIGHT
 		, 1, 1, 1, 1, m_BackGroundTexture, LEVEL_BACKGROUND);
+	m_pRenderer->DrawParticleClimate(0, 0, 0, 1, 1, 1, 1, 1
+		, -0.1, -0.1, m_ClimateTexture, m_fClimateTimer, LEVEL_PARTICLE);
 
 	for (auto& p : m_pBuildingList)
 		p->Render(m_pRenderer);

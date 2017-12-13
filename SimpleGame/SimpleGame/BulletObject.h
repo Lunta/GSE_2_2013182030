@@ -11,11 +11,13 @@
 #define BULLET_TEAM_1_PARTICLE_TEXTURE_PATH		"./Assets/fire.png"
 #define BULLET_TEAM_2_PARTICLE_TEXTURE_PATH		"./Assets/ice.png"
 
+class Particle;
+
 class BulletObject : public GameObject
 {
 private:
 	GameObject*					m_pLaunchedBy;
-	float						m_fParticleTimer;
+	Particle*					m_pParticle;
 
 public:
 	BulletObject(ObjectTeam team, ObjectType tag = ObjectType::OBJECT_BULLET);
@@ -36,6 +38,9 @@ public:
 	virtual void Render(Renderer * pRenderer);
 
 	virtual void CollideWith(GameObject* other);
+
+	virtual void LoadTexture(Renderer * pRenderer, char* path);
+	virtual void SetTexture(UINT textureID);
 
 	void SetLaunchedBy(GameObject* other);
 	GameObject* GetLaunchedBy() const { return m_pLaunchedBy; }
