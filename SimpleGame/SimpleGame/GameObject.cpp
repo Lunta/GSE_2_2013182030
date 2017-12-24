@@ -78,6 +78,12 @@ void GameObject::LoadTexture(Renderer * pRenderer, char * path)
 	m_iTexture = pRenderer->CreatePngTexture(path);
 }
 
+void GameObject::ReleaseTexture(Renderer* pRenderer)
+{
+	if(m_iTexture == 0)
+		pRenderer->DeleteTexture(m_iTexture);
+}
+
 void GameObject::SetParameter(const Vec3f& pos, float size, const Vec4f& color)
 {
 	m_vec3fPos = pos;

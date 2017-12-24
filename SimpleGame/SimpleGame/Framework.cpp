@@ -26,6 +26,8 @@ void Framework::Init(int client_width, int client_height)
 	m_iClientWidth = client_width;
 	m_iClientHeight = client_height;
 
+	srand((unsigned int)time(NULL));
+
 	Timer.Init();
 
 	BuildObjects();
@@ -50,15 +52,33 @@ void Framework::BuildScenes()
 	m_pSceneArr[SceneTypeToIdx(Main)]->BuildObjects();
 	m_pSceneArr[SceneTypeToIdx(Main)]->SetSound(m_pSound);
 
-	m_pCurrentScene = m_pSceneArr[SceneTypeToIdx(Main)];
+	m_pCurrentScene = m_pSceneArr[SceneTypeToIdx(Title)];
 }
 
-void Framework::ChangeScene(const Scene::Type & type)
+void Framework::ChangeScene(const Scene::Type& type, bool bReBuild)
 {
 	if (!m_pCurrentScene)
 		BuildScenes();
 
-	m_pCurrentScene = m_pSceneArr[GetEnumValueByType(type)];
+	auto tag = GetEnumValueByType(type);
+
+	if (bReBuild)
+	{
+		switch (type)
+		{
+		case Scene::Type::Title: break;
+		case Scene::Type::Main:
+		{
+			delete m_pSceneArr[tag];
+			m_pSceneArr[tag] = new MainScene(Scene::Type::Main);
+			m_pSceneArr[tag]->BuildObjects();
+			m_pSceneArr[tag]->SetSound(m_pSound);
+			break;
+		}
+		}
+	}
+
+	m_pCurrentScene = m_pSceneArr[tag];
 }
 
 void Framework::Update(double TimeElapsed)

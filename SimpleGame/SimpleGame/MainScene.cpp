@@ -14,6 +14,10 @@ MainScene::MainScene(const Type& tag)
 	, m_fShakingTimer(0)
 	, m_fShakingFactor(MAIN_SCENE_SHAKING_FACTOR)
 	, m_vec2fShakingVelocity()
+	, m_bGameOver(false)
+	, m_iRemain_building_1(0)
+	, m_iRemain_building_2(0)
+	, m_fGameOverTimer(0.0f)
 {
 }
 MainScene::~MainScene()
@@ -26,8 +30,9 @@ void MainScene::BuildObjects()
 	Scene::BuildObjects();
 	m_BackGroundTexture = m_pRenderer->CreatePngTexture("./Assets/tile.png");
 	m_ClimateTexture = m_pRenderer->CreatePngTexture("./Assets/ice.png");
-	UINT bullet_texture1 = m_pRenderer->CreatePngTexture(BULLET_TEAM_1_PARTICLE_TEXTURE_PATH);
-	UINT bullet_texture2 = m_pRenderer->CreatePngTexture(BULLET_TEAM_2_PARTICLE_TEXTURE_PATH);
+	m_CharactorTexture = m_pRenderer->CreatePngTexture(CHARACTOR_TEXTURE_PATH);
+	m_BulletTexture1 = m_pRenderer->CreatePngTexture(BULLET_TEAM_1_PARTICLE_TEXTURE_PATH);
+	m_BulletTexture2 = m_pRenderer->CreatePngTexture(BULLET_TEAM_2_PARTICLE_TEXTURE_PATH);
 	
 	float building_stride_width = (float)CLIENT_WIDTH * 0.25f;
 	float building_pos_y = (float)CLIENT_HEIGHT * 0.4f;
@@ -43,11 +48,11 @@ void MainScene::BuildObjects()
 			, GameObject::ObjectType::OBJECT_BUILDING);
 		obj->LoadTexture(m_pRenderer, BUILDING_TEAM_1_TEXTURE_PATH);
 		obj->SetBulletList(&m_pBulletList);
-		obj->SetBulletTexture(bullet_texture1);
+		obj->SetBulletTexture(m_BulletTexture1);
 		m_pBuildingList.push_back(obj);
 
 		obj = new BuildingObject(Vec3f(
-			building_stride_width * i
+			  building_stride_width * i
 			, -building_pos_y
 			, 0)
 			, DEFAULT_BUILDING_SIZE
@@ -56,7 +61,7 @@ void MainScene::BuildObjects()
 			, GameObject::ObjectType::OBJECT_BUILDING);
 		obj->LoadTexture(m_pRenderer, BUILDING_TEAM_2_TEXTURE_PATH);
 		obj->SetBulletList(&m_pBulletList);
-		obj->SetBulletTexture(bullet_texture2);
+		obj->SetBulletTexture(m_BulletTexture2);
 		m_pBuildingList.push_back(obj);
 	}
 }
@@ -64,14 +69,29 @@ void MainScene::BuildObjects()
 void MainScene::ReleaseObjects()
 {
 	for (auto& p : m_pBuildingList)
-		if (p) delete p;
+		if (p) {
+			delete p;
+			p = nullptr;
+		}
 	for (auto& p : m_pBulletList)
-		if (p) delete p;
+		if (p) {
+			delete p;
+			p = nullptr;
+		}
 	for (auto& p : m_pCharactorList)
-		if (p) delete p;
+		if (p) {
+			delete p;
+			p = nullptr;
+		}
 	m_pBuildingList.clear();
 	m_pBulletList.clear();
 	m_pCharactorList.clear();
+
+	m_pRenderer->DeleteTexture(m_BackGroundTexture);
+	m_pRenderer->DeleteTexture(m_ClimateTexture);
+	m_pRenderer->DeleteTexture(m_CharactorTexture);
+	m_pRenderer->DeleteTexture(m_BulletTexture1);
+	m_pRenderer->DeleteTexture(m_BulletTexture2);
 }
 
 void MainScene::Update(const double TimeElapsed)
@@ -93,19 +113,109 @@ void MainScene::Update(const double TimeElapsed)
 			m_vec2fShakingVelocity = Vec2f();
 		}
 	}
-
+	
 	for (auto& p : m_pBuildingList)
+	{
+		switch (p->GetTeamTag())
+		{
+		case GameObject::ObjectTeam::OBJECT_TEAM_1: ++m_iRemain_building_1; break;
+		case GameObject::ObjectTeam::OBJECT_TEAM_2: ++m_iRemain_building_2; break;
+		}
 		p->Update(TimeElapsed);
+	}
+	if (m_iRemain_building_1 == 0 || m_iRemain_building_2 ==0)
+		m_bGameOver = true;
+
 	for (auto& p : m_pBulletList)
 		p->Update(TimeElapsed);
+
 	for (auto& p : m_pCharactorList)
 		p->Update(TimeElapsed);
+
+	for (auto& p : m_pBuildingList)
+	{
+		auto teamTag = p->GetTeamTag();
+		bool bCalc = false;
+		Vec3f pos = p->GetPos();
+		Vec3f enemyPos;
+		float minLen = 10000.f;
+		for (auto& q : m_pCharactorList)
+		{
+			if (q->GetTeamTag() == teamTag) continue;
+			float len = Length(q->GetPos() - pos);
+			if (len < minLen)
+			{
+				minLen = len;
+				enemyPos = q->GetPos();
+				bCalc = true;
+			}
+		}
+		if (bCalc)
+			if (minLen < CLIENT_HEIGHT / 2)
+				p->SetDirection(enemyPos - pos);
+		else p->SetDirection(Vec3f());
+	}
+
+	for (auto& p : m_pCharactorList)
+	{
+		auto teamTag = p->GetTeamTag();
+		bool bCalc = false;
+		Vec3f pos = p->GetPos();
+		Vec3f enemyPos;
+		float minLen = 10000.f;
+		for (auto& q : m_pBuildingList)
+		{
+			if (q->GetTeamTag() == teamTag) continue;
+			float len = Length(q->GetPos() - pos);
+			if (len < minLen)
+			{
+				minLen = len;
+				enemyPos = q->GetPos();
+				bCalc = true;
+			}
+		}
+		for (auto& q : m_pCharactorList)
+		{
+			if (q->GetTeamTag() == teamTag) continue;
+			float len = Length(q->GetPos() - pos);
+			if (len < minLen)
+			{
+				minLen = len;
+				enemyPos = q->GetPos();
+				bCalc = true;
+			}
+		}
+		if (bCalc)
+		{
+			p->SetDirection(enemyPos - pos);
+			if (minLen < DEFAULT_CHARACTOR_SHOOT_RANGE)
+				p->SetSpeed(0);
+			else
+				p->SetSpeed(DEFAULT_CHARACTOR_SPEED);
+		}
+		else p->SetSpeed(0);
+	}
 
 	PhysicsProcess(TimeElapsed);
 }
 
 void MainScene::PrepareUpdate(const double TimeElapsed)
 {
+	if (m_bGameOver)
+	{
+		m_fGameOverTimer += TimeElapsed;
+		if (m_fGameOverTimer > GAMEOVER_TIME)
+		{
+			m_pSound->StopAllSounds();
+			GameFramework.ChangeScene(Scene::Type::Title);
+		}
+	}
+	else
+	{
+		m_iRemain_building_1 = 0;
+		m_iRemain_building_2 = 0;
+	}
+
 	m_pBuildingList.remove_if(
 		[](const GameObject* pObj)->bool {
 		if (pObj->IsDie()) { delete pObj; return true; }
@@ -115,7 +225,7 @@ void MainScene::PrepareUpdate(const double TimeElapsed)
 		if (pObj->IsDie()) { delete pObj; return true; }
 		return false; });
 	m_pCharactorList.remove_if(
-		[](const GameObject* pObj)->bool {
+		[&](GameObject* pObj)->bool {
 		if (pObj->IsDie()) { delete pObj; return true; }
 		return false; });
 
@@ -178,6 +288,17 @@ void MainScene::PhysicsProcess(const double TimeElapsed)
 			}
 		}
 	}
+
+	for (auto& p : m_pCharactorList)
+		for (auto& q : m_pCharactorList)
+		{
+			if (p == q) continue;
+			if (p->GetBindingBox().CheckCollision(q->GetBindingBox()))
+			{
+				p->CollideWith(q);
+				q->CollideWith(p);
+			}
+		}
 }
 
 void MainScene::Render()
@@ -199,6 +320,17 @@ void MainScene::Render()
 		p->Render(m_pRenderer);
 	for (auto& p : m_pCharactorList)
 		p->Render(m_pRenderer);
+	
+	if (m_bGameOver)
+	{
+		m_pRenderer->DrawSolidRect(0, 0, 0, 1000, 0, 0, 0, 0.5f, LEVEL_GOD);
+		if (m_iRemain_building_1 == 0 && m_iRemain_building_2 == 0)
+			m_pRenderer->DrawTextW(-40, 0, GLUT_BITMAP_HELVETICA_18, 1, 1, 1, "Gameover! - Draw");
+		else if (m_iRemain_building_1 == 0)
+			m_pRenderer->DrawTextW(-50, 0, GLUT_BITMAP_HELVETICA_18, 1, 1, 1, "Gameover! - Team2 Win");
+		else if (m_iRemain_building_2 == 0)
+			m_pRenderer->DrawTextW(-50, 0, GLUT_BITMAP_HELVETICA_18, 1, 1, 1, "Gameover! - Team1 Win");
+	}
 }
 
 void MainScene::Input_Key(unsigned char key, int x, int y)
@@ -287,7 +419,7 @@ void MainScene::RandomSpawnCharactor(GameObject::ObjectTeam team)
 				, CHARACTOR_TEAM_1_COLOR
 				, GameObject::ObjectTeam::OBJECT_TEAM_1
 				, GameObject::ObjectType::OBJECT_CHARACTER);
-			obj->LoadTexture(m_pRenderer, CHARACTOR_TEXTURE_PATH);
+			obj->SetTexture(m_CharactorTexture);
 			obj->SetTextureSize({ 4,4 });
 			obj->SetDirection(
 				(rand() % 2000) - (rand() / 1000),
@@ -306,7 +438,7 @@ void MainScene::RandomSpawnCharactor(GameObject::ObjectTeam team)
 				, CHARACTOR_TEAM_2_COLOR
 				, GameObject::ObjectTeam::OBJECT_TEAM_2
 				, GameObject::ObjectType::OBJECT_CHARACTER);
-			obj->LoadTexture(m_pRenderer, CHARACTOR_TEXTURE_PATH);
+			obj->SetTexture(m_CharactorTexture);
 			obj->SetTextureSize({ 4,4 });
 			obj->SetDirection(
 				(rand() % 2000) - (rand() / 1000),
@@ -346,7 +478,7 @@ void MainScene::SpawnCharactor(const Vec3f & pos)
 				, CHARACTOR_TEAM_2_COLOR
 				, GameObject::ObjectTeam::OBJECT_TEAM_2
 				, GameObject::ObjectType::OBJECT_CHARACTER);
-			obj->LoadTexture(m_pRenderer, CHARACTOR_TEXTURE_PATH);
+			obj->SetTexture(m_CharactorTexture);
 			obj->SetTextureSize({ 4,4 });
 			obj->SetDirection(
 				(rand() % 2000) - (rand() / 1000),

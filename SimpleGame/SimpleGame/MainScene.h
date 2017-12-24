@@ -4,9 +4,10 @@
 
 #define MAX_OBJECTS_COUNT				100
 #define TEAM_1_CHARACTOR_RESPAWN_DELAY	1.0f
-#define TEAM_2_CHARACTOR_RESPAWN_DELAY	2.0f
+#define TEAM_2_CHARACTOR_RESPAWN_DELAY	1.0f
 #define MAIN_SCENE_SHAKING_TIME			0.5f
 #define MAIN_SCENE_SHAKING_FACTOR		10.f
+#define GAMEOVER_TIME					3.0f
 
 class GameObject;
 
@@ -14,6 +15,9 @@ class MainScene final : public Scene
 {
 private:
 	UINT						m_BackGroundTexture;
+	UINT						m_CharactorTexture;
+	UINT						m_BulletTexture1;
+	UINT						m_BulletTexture2;
 
 	UINT						m_ClimateTexture;
 	float						m_fClimateTimer;
@@ -29,6 +33,11 @@ private:
 	float						m_fShakingTimer;
 	float						m_fShakingFactor;
 	Vec2f						m_vec2fShakingVelocity;
+
+	bool						m_bGameOver;
+	float						m_fGameOverTimer;
+	int							m_iRemain_building_1;
+	int							m_iRemain_building_2;
 
 public:
 	MainScene(const Type& tag);

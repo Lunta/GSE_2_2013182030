@@ -51,7 +51,7 @@ void BuildingObject::Update(const double TimeElapsed)
 	m_BindingBox.SetPos(m_vec3fPos);
 	m_fShootTimer += TimeElapsed;
 	m_fLifeTimer -= TimeElapsed;
-	if (m_fShootTimer > DEFAULT_BUILDING_SHOOT_DELAY)
+	if (m_fShootTimer > DEFAULT_BUILDING_SHOOT_DELAY && Length(m_vec3fDirection) > 0.1f)
 	{
 		m_fShootTimer = 0.f;
 		ShootBullet();
@@ -169,29 +169,33 @@ void BuildingObject::SetBulletList(std::list<GameObject*>* bullet_list)
 void BuildingObject::ShootBullet()
 {
 	if (!m_BulletList) return;
+
 	BulletObject* bullet = nullptr;
 	switch (m_TeamTag)
 	{
 	case ObjectTeam::OBJECT_TEAM_1:
+	{
 		bullet = new BulletObject(
-			  m_vec3fPos
+			m_vec3fPos
 			, DEFAULT_BULLET_SIZE
 			, BULLET_TEAM_1_COLOR
 			, m_TeamTag
 			, ObjectType::OBJECT_BULLET);
 		break;
+	}
+		
 	case ObjectTeam::OBJECT_TEAM_2:
+	{
 		bullet = new BulletObject(
-			  m_vec3fPos
+			m_vec3fPos
 			, DEFAULT_BULLET_SIZE
 			, BULLET_TEAM_2_COLOR
 			, m_TeamTag
 			, ObjectType::OBJECT_BULLET);
 		break;
 	}
-	bullet->SetDirection(
-		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
-		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
+	}
+	bullet->SetDirection(m_vec3fDirection);
 	bullet->SetLaunchedBy(this);
 	bullet->SetTexture(m_iBulletTexture);
 	bullet->SetTextureSize({ 8, 3 });

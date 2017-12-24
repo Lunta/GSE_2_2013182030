@@ -24,7 +24,7 @@ public:
 	void Init(int client_width, int client_height);
 	void BuildObjects();
 	void BuildScenes();
-	void ChangeScene(const Scene::Type& type);
+	void ChangeScene(const Scene::Type& type, bool bReBuild = false);
 
 	void Update(double TimeElapsed);
 	void Render();

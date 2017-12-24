@@ -67,6 +67,11 @@ void Sound::PlaySound(int index, bool bLoop, float volume)
 	m_engine->play2D((*iter).second, bLoop);
 }
 
+void Sound::StopAllSounds()
+{
+	m_engine->stopAllSounds();
+}
+
 Sound::~Sound()
 {
 	std::map<int, ISoundSource*>::iterator iter;

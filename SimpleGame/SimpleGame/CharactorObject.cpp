@@ -36,14 +36,15 @@ CharactorObject::CharactorObject(
 CharactorObject::~CharactorObject()
 {
 	for (auto& p : *m_ArrowList)
-	{
-		auto arrow = dynamic_cast<ArrowObject*>(p);
-		if (arrow)
+		if (p)
 		{
-			if (this == arrow->GetLaunchedBy())
-				p->SetLife(0.0f);
+			auto arrow = dynamic_cast<ArrowObject*>(p);
+			if (arrow)
+			{
+				if (this == arrow->GetLaunchedBy())
+					p->SetLife(0.0f);
+			}
 		}
-	}
 }
 
 void CharactorObject::Update(const double TimeElapsed)
@@ -160,6 +161,12 @@ void CharactorObject::CollideWith(GameObject* other)
 	if (!m_bActive) return;
 	switch (other->GetTag())
 	{
+	case GameObject::ObjectType::OBJECT_CHARACTER:
+	{
+		Vec3f collisionDir = Normalize(m_vec3fPos - other->GetPos());
+		m_vec3fPos += collisionDir * COLLISION_PENALTY;
+		break;
+	}
 	case GameObject::ObjectType::OBJECT_BUILDING:
 	{
 		if (m_bIsCollision) break;
@@ -232,9 +239,7 @@ void CharactorObject::ShootBullet()
 			, ObjectType::OBJECT_ARROW);
 		break;
 	}
-	bullet->SetDirection(
-		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0),
-		(1 - 2 * (rand() % 2))*(rand() % 100 / 100.0));
+	bullet->SetDirection(m_vec3fDirection);
 	bullet->SetLaunchedBy(this);
 	m_ArrowList->push_back(bullet);
 }

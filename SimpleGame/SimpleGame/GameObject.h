@@ -3,8 +3,8 @@
 
 #define DEFAULT_MAX_LIFE	100.0f
 #define DEFAULT_LIFE_TIME	10000.0f
-#define COLLISION_TIME		0.1f
-
+#define COLLISION_TIME		0.05f
+#define COLLISION_PENALTY	1.f
 class Renderer;
 
 class GameObject
@@ -68,8 +68,9 @@ public:
 
 	virtual void CollideWith(GameObject* other) = 0;
 
-	virtual void LoadTexture(Renderer * pRenderer, char* path);
+	virtual void LoadTexture(Renderer* pRenderer, char* path);
 	virtual void SetTexture(UINT textureID) { m_iTexture = textureID; }
+	virtual void ReleaseTexture(Renderer* pRenderer);
 
 	void Awake() { m_bActive = true; };
 	void Sleep() { m_bActive = false; };

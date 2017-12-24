@@ -6,7 +6,7 @@ class GameObject;
 class TitleScene final : public Scene
 {
 private:
-	GameObject* m_pTestObject;
+	UINT								m_BackGroundTexture;
 
 public:
 	TitleScene(const Type& tag);

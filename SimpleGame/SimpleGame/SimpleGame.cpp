@@ -36,22 +36,18 @@ void Idle(void)
 void KeyInput(unsigned char key, int x, int y)
 {
 	GameFramework.Input_Key(key, x, y);
-	//std::cout << "KeyInput Key: " << key << " X: " << x << " Y: " << y << std::endl;
 }
 
 // 방향키, 쉬프트, 컨트롤
 void SpecialKeyInput(int key, int x, int y)
 {
 	GameFramework.Input_SpecialKey(key, x, y);
-	//std::cout << "Special Key Input Key: " << key << " X: " << x << " Y: " << y << std::endl;
 }
 
 // 마우스 클릭 및 클릭시 좌표
 void MouseInput(int button, int state, int x, int y)
 {
 	GameFramework.Input_MouseButton(button, state, x, y);
-	//std::cout << "Mouse Input Button: " << button
-	//	<< " state: " << state << " X: " << x << " Y: " << y << std::endl;
 }
 
 int main(int argc, char **argv)

@@ -8,27 +8,21 @@ TitleScene::TitleScene(const Type& tag) : Scene(tag)
 }
 TitleScene::~TitleScene()
 {
+	m_pRenderer->DeleteTexture(m_BackGroundTexture);
 }
 
 void TitleScene::BuildObjects()
 {
 	Scene::BuildObjects();
-	m_pTestObject = new ArrowObject(
-		Vec3f()
-		, DEFAULT_ARROW_SIZE
-		, ARROW_TEAM_1_COLOR
-		, GameObject::ObjectTeam::OBJECT_TEAM_1
-		, GameObject::ObjectType::OBJECT_ARROW);
+	m_BackGroundTexture = m_pRenderer->CreatePngTexture("./Assets/Title.png");
 }
 
 void TitleScene::ReleaseObjects()
 {
-	delete m_pTestObject;
 }
 
 void TitleScene::Update(const double TimeElapsed)
 {
-	m_pTestObject->Update(TimeElapsed);
 }
 
 void TitleScene::PrepareUpdate(const double TimeElapsed)
@@ -41,9 +35,17 @@ void TitleScene::PhysicsProcess(const double TimeElapsed)
 
 void TitleScene::Render()
 {
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
-
-	m_pTestObject->Render(m_pRenderer);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	m_pRenderer->DrawTexturedRect(0, 0, 0, CLIENT_HEIGHT
+		, 1, 1, 1, 1, m_BackGroundTexture, LEVEL_BACKGROUND);
+	
+	m_pRenderer->DrawTextW(
+		-90, -250
+		, GLUT_BITMAP_HELVETICA_18
+		, static_cast<float>(rand() % 10000) / 10000.f
+		, static_cast<float>(rand() % 10000) / 10000.f
+		, static_cast<float>(rand() % 10000) / 10000.f
+		, "PRESS SPACE KEY TO START GAME");
 }
 
 void TitleScene::Input_Key(unsigned char key, int x, int y)
@@ -55,7 +57,8 @@ void TitleScene::Input_Key(unsigned char key, int x, int y)
 	case KEY_BACKSPACE:
 		break;
 	case KEY_SPACE:
-		GameFramework.ChangeScene(Scene::Type::Main);
+		GameFramework.ChangeScene(Scene::Type::Main, true);
+		m_pSound->PlaySoundByTag(CSoundManager::SoundTag::BackGround, true, 0.3f);
 		break;
 	case KEY_ENTER:
 		break;
